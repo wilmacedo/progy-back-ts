@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { Institution } from '../controllers/Institution';
 
-const institutionRouter = Router();
+const router = Router();
 const controller = new Institution();
 
-institutionRouter.post('/', controller.create);
+router.post('/', controller.create);
 
-export { institutionRouter };
+export default router;

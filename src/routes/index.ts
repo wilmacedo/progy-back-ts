@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { institutionRouter } from './institution';
-import { roleRouter } from './role';
-import { userRouter } from './user';
+import institutionRouter from './institution';
+import roleRouter from './role';
+import userRouter from './user';
 
 const router = Router();
 

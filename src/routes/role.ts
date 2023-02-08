@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import { RoleController } from '../controllers/Role';
 
-const roleRouter = Router();
+const router = Router();
 const controller = new RoleController();
 
-roleRouter.post('/', controller.create);
+router.post('/', controller.create);
+router.get('/', controller.findMany);
+router.get('/:id', controller.findOne);
+router.put('/:id', controller.update);
 
-export { roleRouter };
+export default router;
