@@ -52,4 +52,17 @@ export class RoleController {
 
     response.status(200).json(updateUser);
   }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.status(400).json({ error: 'ID is missing' });
+      return;
+    }
+
+    const idNum = Number(id);
+    await prismaClient.role.delete({ where: { id: idNum } });
+
+    response.status(204).json();
+  }
 }
