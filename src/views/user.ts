@@ -1,5 +1,5 @@
 import { NextFunction, Request } from 'express';
-import { UserData } from '../controllers/User';
+import { UserData } from '../controllers/user';
 import { ResponseView } from '../types';
 import { error, ResponseData } from './utils';
 

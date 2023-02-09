@@ -2,11 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { router } from './routes';
-import dotenv from 'dotenv';
 import http from 'http';
 import { normalizePort, onError } from './utils/server';
+import dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({ path: `${__dirname}/../../.env.test` });
 
 const app = express();
 

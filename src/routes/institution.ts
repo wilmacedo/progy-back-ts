@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Institution } from '../controllers/Institution';
+import { Institution } from '../controllers/institution';
 
 const router = Router();
 const controller = new Institution();

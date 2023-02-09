@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { prismaClient } from '../database/prismaClient';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { AuthData } from '../types/auth';
 
 export interface UserData {
   id: number;
@@ -82,5 +84,35 @@ export class User {
     await prismaClient.user.delete({ where: { id: idNum } });
 
     response.status(204).json();
+  }
+
+  async login(request: Request, response: Response) {
+    const { email, password } = request.body;
+
+    const user = await prismaClient.user.findFirst({ where: { email } });
+    if (!user) {
+      response.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      response.status(401).json({ error: 'Password not match' });
+      return;
+    }
+
+    const userData: AuthData = {
+      id: user.id,
+      role_id: user.role_id,
+      institution_id: user.institution_id,
+    };
+    const token = jwt.sign(userData, process.env.JWT_SECRET as string);
+
+    response.status(200).json({
+      role: user.role_id,
+      token,
+      institution_id: user.institution_id,
+      // unit_id: user.unit_id,
+    });
   }
 }
