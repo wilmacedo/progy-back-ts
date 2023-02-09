@@ -1,8 +1,20 @@
 import { Request, Response } from 'express';
 import { prisma } from '../database/client';
+import { ErrorType } from '../types';
+
+export interface RoleData {
+  id: number;
+  name: string;
+}
 
 export class RoleController {
   async create(request: Request, response: Response) {
+    const fields = ['name'];
+    if (fields.filter(field => request.body[field] === undefined).length > 0) {
+      response.role.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
     const { name } = request.body;
 
     const role = await prisma.role.create({
@@ -11,52 +23,56 @@ export class RoleController {
       },
     });
 
-    return response.status(200).json(role);
+    response.role.show(role);
   }
 
   async findMany(_: Request, response: Response) {
     const roles = await prisma.role.findMany();
+    if (roles.length === 0) {
+      response.role.error({ type: ErrorType.EMPTY });
+      return;
+    }
 
-    return response.status(200).json(roles);
+    response.role.many(roles);
   }
 
   async findOne(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.role.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
     const idNum = Number(id);
     const role = await prisma.role.findUnique({ where: { id: idNum } });
     if (!role) {
-      response.status(404).json({ error: 'No one role found with this id' });
+      response.role.error({ type: ErrorType.NOT_FOUND });
       return;
     }
 
-    response.status(200).json(role);
+    response.role.show(role);
   }
 
   async update(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.role.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
     const idNum = Number(id);
-    const updateUser = await prisma.role.update({
+    const updateRole = await prisma.role.update({
       where: { id: idNum },
       data: request.body,
     });
 
-    response.status(200).json(updateUser);
+    response.role.show(updateRole);
   }
 
   async delete(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.role.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
