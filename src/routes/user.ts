@@ -9,7 +9,7 @@ const auth = new AuthController();
 
 router.post('/login', controller.login);
 
-router.use(auth.verify, verify(roles.high), permission);
+router.use(auth.verify, verify(roles.low), permission);
 
 router.post('/', auth.verify, controller.create);
 router.get('/', auth.verify, controller.findMany);

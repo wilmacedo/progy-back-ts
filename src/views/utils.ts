@@ -17,17 +17,31 @@ export interface ResponseData<ModelData> {
 const error = (response: Response, name: string) => (error: ResponseError) => {
   const { type } = error;
 
-  if (error.code) {
+  if (error.code && typeof error.code !== 'string') {
     response.status(error.code).json({ error: error.message });
     return;
+  }
+
+  let code, message;
+
+  if (typeof error.code === 'string') {
+    switch (error.code) {
+      case 'P2025':
+        code = 404;
+        message = capitalize(name) + ' not found';
+        break;
+      default:
+        code = 500;
+        message = error.message;
+    }
+
+    response.status(code).json({ error: message });
   }
 
   if (error.type === undefined) {
     response.status(500).json({ error: error.message });
     return;
   }
-
-  let code, message;
 
   switch (type) {
     case ErrorType.MISSING_FIELD:

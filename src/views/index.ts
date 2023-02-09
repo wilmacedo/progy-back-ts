@@ -6,7 +6,15 @@ const router = Router();
 const viewsData: ViewData[] = [
   {
     modelName: 'user',
-    fields: ['id', 'name', 'email', 'role_id', 'institution_id'],
+    fields: [
+      'id',
+      'name',
+      'email',
+      'role_id',
+      'institution_id',
+      'institution',
+      'role',
+    ],
   },
   {
     modelName: 'role',

@@ -9,6 +9,6 @@ export enum ErrorType {
 
 export interface ResponseError {
   type?: ErrorType;
-  code?: number;
+  code?: number | string;
   message?: string;
 }
