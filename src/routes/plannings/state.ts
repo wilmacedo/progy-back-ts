@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { GoalController } from '../../controllers/plannigs/goal';
+import { StateController } from '../../controllers/plannigs/state';
 import { permission, roles, verify } from '../../middleware';
 import { AuthController } from '../../middleware/auth';
 
 const router = Router();
-const controller = new GoalController();
+const controller = new StateController();
 const auth = new AuthController();
 
 router.use(auth.verify, verify(roles.high), permission);

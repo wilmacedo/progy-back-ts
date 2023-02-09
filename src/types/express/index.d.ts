@@ -15,6 +15,10 @@ declare global {
       goal: ViewResponse;
       planning: ViewResponse;
       form: ViewResponse;
+      state: ViewResponse;
+      stage: ViewResponse;
+      unit: ViewResponse;
+      font: ViewResponse;
     }
   }
 }

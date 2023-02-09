@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma } from '../database/client';
-import { ErrorType } from '../types';
+import { prisma } from '../../database/client';
+import { ErrorType } from '../../types';
 
 export class GoalController {
   async create(request: Request, response: Response) {
@@ -29,6 +29,10 @@ export class GoalController {
 
   async findMany(request: Request, response: Response) {
     const { planning_id } = request;
+    if (!planning_id) {
+      response.goal.error({ type: ErrorType.NOT_FOUND_PLANNING });
+      return;
+    }
 
     try {
       const goals = await prisma.goal.findMany({ where: { planning_id } });
