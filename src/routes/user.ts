@@ -11,10 +11,14 @@ router.post('/login', controller.login);
 
 router.use(auth.verify, verify(roles.low), permission);
 
-router.post('/', auth.verify, controller.create);
-router.get('/', auth.verify, controller.findMany);
-router.get('/:id', auth.verify, controller.findOne);
-router.put('/:id', auth.verify, controller.update);
-router.delete('/:id', auth.verify, controller.delete);
+router.get('/me', controller.me);
+
+router.use(auth.verify, verify(roles.high), permission);
+
+router.post('/', controller.create);
+router.get('/', controller.findMany);
+router.get('/:id', controller.findOne);
+router.put('/:id', controller.update);
+router.delete('/:id', controller.delete);
 
 export default router;

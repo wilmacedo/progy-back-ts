@@ -154,4 +154,27 @@ export class User {
       }
     }
   }
+
+  async me(request: Request, response: Response) {
+    const { id } = request.userData;
+
+    if (isNaN(id)) {
+      response.user.error({
+        type: ErrorType.CUSTOM,
+        code: 400,
+        message: 'Invalid token',
+      });
+      return;
+    }
+
+    try {
+      const user = await prisma.user.findUnique({ where: { id } });
+
+      response.user.show(user);
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        response.user.error(e);
+      }
+    }
+  }
 }

@@ -65,6 +65,9 @@ const error = (response: Response, name: string) => (error: ResponseError) => {
       message = 'Unauthorized request';
       break;
     case ErrorType.CUSTOM:
+      code = Number(error.code);
+      message = error.message;
+      break;
     default:
       code = 500;
       message = error.message;
