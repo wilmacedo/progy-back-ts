@@ -57,7 +57,7 @@ model Planning {
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   Perspective       Perspective[]
-  Goals             Goal[]
+  Goal              Goal[]
   Stage             Stage[]
   Unit              Unit[]
   Font              Font[]

@@ -14,6 +14,7 @@ declare global {
       institution: ViewResponse;
       goal: ViewResponse;
       planning: ViewResponse;
+      form: ViewResponse;
     }
   }
 }
