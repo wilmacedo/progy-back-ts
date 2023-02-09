@@ -12,7 +12,8 @@ export interface ViewData {
     | 'state'
     | 'stage'
     | 'unit'
-    | 'font';
+    | 'font'
+    | 'perspective';
   fields: string[];
 }
 

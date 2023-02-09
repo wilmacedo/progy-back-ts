@@ -35,6 +35,7 @@ const viewsData: ViewData[] = [
   { modelName: 'form', fields: [] },
   { modelName: 'stage', fields: ['id', 'name'] },
   { modelName: 'state', fields: ['id', 'name'] },
+  { modelName: 'perspective', fields: ['id', 'name'] },
 ];
 
 viewsData.forEach(({ modelName, fields }) => {

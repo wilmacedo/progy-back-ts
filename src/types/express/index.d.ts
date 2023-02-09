@@ -19,6 +19,7 @@ declare global {
       stage: ViewResponse;
       unit: ViewResponse;
       font: ViewResponse;
+      perspective: ViewResponse;
     }
   }
 }
