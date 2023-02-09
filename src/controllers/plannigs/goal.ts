@@ -21,7 +21,7 @@ export class GoalController {
         data: { ...request.body, planning_id },
       });
 
-      response.goal.show(goal);
+      response.goal.created(goal);
     } catch (e) {
       response.goal.error(e);
     }

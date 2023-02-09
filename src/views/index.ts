@@ -38,6 +38,10 @@ const viewsData: ViewData[] = [
   { modelName: 'perspective', fields: ['id', 'name'] },
   { modelName: 'unit', fields: ['id', 'name', 'code'] },
   { modelName: 'mapp', fields: ['id', 'name'] },
+  {
+    modelName: 'font',
+    fields: ['id', 'name', 'code', 'date', 'value', 'other_value'],
+  },
 ];
 
 viewsData.forEach(({ modelName, fields }) => {

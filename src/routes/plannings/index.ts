@@ -5,6 +5,7 @@ import stageRouter from './stage';
 import perspectiveRouter from './perspective';
 import unitRouter from './unit';
 import mappRouter from './mapp';
+import fontRouter from './font';
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use('/stages', stageRouter);
 router.use('/perspectives', perspectiveRouter);
 router.use('/units', unitRouter);
 router.use('/mapps', mappRouter);
+router.use('/fonts', fontRouter);
 
 export default router;
