@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { prismaClient } from '../database/prismaClient';
+import { prisma } from '../database/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthData } from '../types/auth';
+import { ErrorType } from '../types';
 
 export interface UserData {
   id: number;
@@ -14,47 +15,55 @@ export interface UserData {
 
 export class User {
   async create(request: Request, response: Response) {
-    const { name, password, email, institution_id, role_id } = request.body;
+    const fields = ['name', 'password', 'email', 'institution_id', 'role_id'];
+    if (fields.filter(field => request.body[field] === undefined).length > 0) {
+      response.user.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
 
-    const encryptPassword = await bcrypt.hash(password, bcrypt.genSaltSync(10));
+    const params = request.body;
 
-    const user = await prismaClient.user.create({
-      data: {
-        name,
-        password: encryptPassword,
-        email,
-        institution_id,
-        role_id,
-      },
+    const encryptPassword = await bcrypt.hash(
+      params.password,
+      bcrypt.genSaltSync(10),
+    );
+    params.password = encryptPassword;
+
+    const user = await prisma.user.create({
+      data: params,
     });
 
-    return response.status(200).json(user);
+    return response.user.show(user);
   }
 
   async findMany(_: Request, response: Response) {
-    const users = await prismaClient.user.findMany();
+    const users = await prisma.user.findMany();
+    if (users.length === 0) {
+      response.user.error({ type: ErrorType.EMPTY });
+      return;
+    }
 
-    return response.status(200).json(users);
+    return response.user.many(users);
   }
 
   async findOne(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.user.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
     const idNumber = Number(id);
 
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: idNumber },
     });
     if (!user) {
-      response.status(400).json({ error: 'No user found for this id' });
+      response.user.error({ type: ErrorType.NOT_FOUND });
       return;
     }
 
-    response.status(200).json(user);
+    response.user.show(user);
   }
 
   async update(request: Request, response: Response) {
@@ -65,7 +74,7 @@ export class User {
     }
 
     const idNum = Number(id);
-    const updateUser = await prismaClient.user.update({
+    const updateUser = await prisma.user.update({
       where: { id: idNum },
       data: request.body,
     });
@@ -81,7 +90,7 @@ export class User {
     }
 
     const idNum = Number(id);
-    await prismaClient.user.delete({ where: { id: idNum } });
+    await prisma.user.delete({ where: { id: idNum } });
 
     response.status(204).json();
   }
@@ -89,7 +98,7 @@ export class User {
   async login(request: Request, response: Response) {
     const { email, password } = request.body;
 
-    const user = await prismaClient.user.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { email } });
     if (!user) {
       response.status(404).json({ error: 'User not found' });
       return;

@@ -1,5 +1,13 @@
 import { Response } from 'express';
 import { ErrorType, ResponseError } from '../types';
+import { capitalize } from '../utils';
+
+export interface ViewResponse {
+  error: (error: ResponseError) => void;
+  created: (data: any) => void;
+  show: (data: any) => void;
+  many: (data: any) => void;
+}
 
 export interface ResponseData<ModelData> {
   data: ModelData | ModelData[];
@@ -14,7 +22,7 @@ const error = (response: Response, name: string) => (error: ResponseError) => {
     return;
   }
 
-  if (!error.type) {
+  if (error.type === undefined) {
     response.status(500).json({ error: error.message });
     return;
   }
@@ -28,7 +36,7 @@ const error = (response: Response, name: string) => (error: ResponseError) => {
       break;
     case ErrorType.NOT_FOUND:
       code = 404;
-      message = name + ' not found';
+      message = capitalize(name) + 's not found';
       break;
     case ErrorType.NOT_FOUND_PLANNING:
       code = 404;
@@ -36,7 +44,7 @@ const error = (response: Response, name: string) => (error: ResponseError) => {
       break;
     case ErrorType.EMPTY:
       code = 404;
-      message = name + ' are empty';
+      message = capitalize(name) + 's are empty';
       break;
     case ErrorType.PERMISSION:
       code = 403;

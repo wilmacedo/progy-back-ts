@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { prismaClient } from '../database/prismaClient';
+import { prisma } from '../database/client';
 
 export class RoleController {
   async create(request: Request, response: Response) {
     const { name } = request.body;
 
-    const role = await prismaClient.role.create({
+    const role = await prisma.role.create({
       data: {
         name,
       },
@@ -15,7 +15,7 @@ export class RoleController {
   }
 
   async findMany(_: Request, response: Response) {
-    const roles = await prismaClient.role.findMany();
+    const roles = await prisma.role.findMany();
 
     return response.status(200).json(roles);
   }
@@ -28,7 +28,7 @@ export class RoleController {
     }
 
     const idNum = Number(id);
-    const role = await prismaClient.role.findUnique({ where: { id: idNum } });
+    const role = await prisma.role.findUnique({ where: { id: idNum } });
     if (!role) {
       response.status(404).json({ error: 'No one role found with this id' });
       return;
@@ -45,7 +45,7 @@ export class RoleController {
     }
 
     const idNum = Number(id);
-    const updateUser = await prismaClient.role.update({
+    const updateUser = await prisma.role.update({
       where: { id: idNum },
       data: request.body,
     });
@@ -61,7 +61,7 @@ export class RoleController {
     }
 
     const idNum = Number(id);
-    await prismaClient.role.delete({ where: { id: idNum } });
+    await prisma.role.delete({ where: { id: idNum } });
 
     response.status(204).json();
   }

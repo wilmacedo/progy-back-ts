@@ -5,6 +5,7 @@ import { router } from './routes';
 import http from 'http';
 import { normalizePort, onError } from './utils/server';
 import dotenv from 'dotenv';
+import views from './views';
 
 dotenv.config();
 dotenv.config({ path: `${__dirname}/../../.env.test` });
@@ -12,6 +13,8 @@ dotenv.config({ path: `${__dirname}/../../.env.test` });
 const app = express();
 
 app.use(cors());
+
+app.use(views);
 
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.json({ limit: '50mb' }));

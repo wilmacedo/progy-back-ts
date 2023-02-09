@@ -29,23 +29,3 @@ export class AuthController {
     }
   }
 }
-
-// const jwt = require('jsonwebtoken');
-// const { promisify } = require('util');
-
-//   try {
-//     let { id, role, institution_id, unit_id } = await promisify(jwt.verify)(
-//       token,
-//       process.env.SECRET,
-//     );
-
-//     if (!id || !role)
-//       return response.status(401).json({ error: 'Token not provided' });
-
-//     request.user = { id, role, institution_id, unit_id };
-
-//     next();
-//   } catch (error) {
-//     return response.status(500).json({ error: 'Internal server error' });
-//   }
-// };

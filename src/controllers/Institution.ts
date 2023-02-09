@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { prismaClient } from '../database/prismaClient';
+import { prisma } from '../database/client';
 
 export class Institution {
   async create(request: Request, response: Response) {
     const { name, code } = request.body;
 
-    const institution = await prismaClient.institution.create({
+    const institution = await prisma.institution.create({
       data: {
         name,
         code,
