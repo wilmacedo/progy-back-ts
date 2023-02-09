@@ -13,7 +13,7 @@ export class RoleController {
     try {
       const role = await prisma.role.create({ data: request.body });
 
-      response.role.show(role);
+      response.role.created(role);
     } catch (e) {
       response.role.error(e);
     }

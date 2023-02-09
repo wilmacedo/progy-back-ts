@@ -16,7 +16,7 @@ export class InstitutionController {
         data: request.body,
       });
 
-      response.institution.show(institution);
+      response.institution.created(institution);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         response.institution.error(e);

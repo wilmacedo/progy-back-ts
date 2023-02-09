@@ -15,7 +15,7 @@ export class PlanningController {
         data: request.body,
       });
 
-      response.planning.show(planning);
+      response.planning.created(planning);
     } catch (e) {
       response.planning.error(e);
     }

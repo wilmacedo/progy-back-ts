@@ -26,7 +26,7 @@ export class User {
         data: params,
       });
 
-      response.user.show(user);
+      response.user.created(user);
     } catch (e) {
       response.user.error(e);
     }

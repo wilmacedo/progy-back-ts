@@ -21,7 +21,7 @@ export class UnitController {
         data: { ...request.body, planning_id },
       });
 
-      response.unit.show(unit);
+      response.unit.created(unit);
     } catch (e) {
       response.unit.error(e);
     }

@@ -21,7 +21,7 @@ export class StageController {
         data: { ...request.body, planning_id },
       });
 
-      response.stage.show(stage);
+      response.stage.created(stage);
     } catch (e) {
       response.stage.error(e);
     }

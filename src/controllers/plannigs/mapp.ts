@@ -21,7 +21,7 @@ export class MappController {
         data: { ...request.body, planning_id },
       });
 
-      response.mapp.show(mapp);
+      response.mapp.created(mapp);
     } catch (e) {
       response.mapp.error(e);
     }

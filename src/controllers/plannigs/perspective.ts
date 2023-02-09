@@ -21,7 +21,7 @@ export class PerspectiveController {
         data: { ...request.body, planning_id },
       });
 
-      response.perspective.show(perspective);
+      response.perspective.created(perspective);
     } catch (e) {
       response.perspective.error(e);
     }

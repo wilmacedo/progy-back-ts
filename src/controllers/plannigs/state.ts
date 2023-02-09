@@ -21,7 +21,7 @@ export class StateController {
         data: { ...request.body, planning_id },
       });
 
-      response.state.show(state);
+      response.state.created(state);
     } catch (e) {
       response.state.error(e);
     }
