@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../database/client';
 import { ErrorType } from '../types';
 
-export class Institution {
+export class InstitutionController {
   async create(request: Request, response: Response) {
     const fields = ['name', 'code'];
     if (fields.filter(field => request.body[field] === undefined).length > 0) {

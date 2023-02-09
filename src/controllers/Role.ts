@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 import { prisma } from '../database/client';
 import { ErrorType } from '../types';
@@ -16,9 +15,7 @@ export class RoleController {
 
       response.role.show(role);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.role.error(e);
-      }
+      response.role.error(e);
     }
   }
 
@@ -32,9 +29,7 @@ export class RoleController {
 
       response.role.many(roles);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.role.error(e);
-      }
+      response.role.error(e);
     }
   }
 
@@ -55,9 +50,7 @@ export class RoleController {
 
       response.role.show(role);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.role.error(e);
-      }
+      response.role.error(e);
     }
   }
 
@@ -77,9 +70,7 @@ export class RoleController {
 
       response.role.show(updateRole);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.role.error(e);
-      }
+      response.role.error(e);
     }
   }
 
@@ -96,9 +87,7 @@ export class RoleController {
 
       response.status(204).json();
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.role.error(e);
-      }
+      response.role.error(e);
     }
   }
 }

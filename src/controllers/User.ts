@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthData } from '../types/auth';
 import { ErrorType } from '../types';
-import { Prisma } from '@prisma/client';
 
 export class User {
   async create(request: Request, response: Response) {
@@ -29,9 +28,7 @@ export class User {
 
       response.user.show(user);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -72,9 +69,7 @@ export class User {
 
       response.user.show(user);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -94,9 +89,7 @@ export class User {
 
       response.user.show(updateUser);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -113,9 +106,7 @@ export class User {
 
       response.status(204).json();
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -149,9 +140,7 @@ export class User {
         // unit_id: user.unit_id,
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -172,9 +161,7 @@ export class User {
 
       response.user.show(user);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 
@@ -238,9 +225,7 @@ export class User {
 
       response.user.show(updateUser);
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        response.user.error(e);
-      }
+      response.user.error(e);
     }
   }
 }

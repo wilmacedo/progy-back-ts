@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { InstitutionController } from '../controllers/institution';
-import { permission, roles, verify } from '../middleware';
+import { PlanningController } from '../controllers/planning';
+import { getPlanning, permission, roles, verify } from '../middleware';
 import { AuthController } from '../middleware/auth';
+import planningRouter from './plannings';
 
 const router = Router();
-const controller = new InstitutionController();
+const controller = new PlanningController();
 const auth = new AuthController();
 
 router.use(auth.verify, verify(roles.high), permission);
+
+router.use('/:planning_id', getPlanning, planningRouter);
 
 router.post('/', controller.create);
 router.get('/', controller.findMany);

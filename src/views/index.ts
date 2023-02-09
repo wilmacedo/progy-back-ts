@@ -24,6 +24,14 @@ const viewsData: ViewData[] = [
     modelName: 'institution',
     fields: ['id', 'name', 'code'],
   },
+  {
+    modelName: 'goal',
+    fields: ['id', 'name'],
+  },
+  {
+    modelName: 'planning',
+    fields: ['id', 'name', 'institution_id', 'institution'],
+  },
 ];
 
 viewsData.forEach(({ modelName, fields }) => {

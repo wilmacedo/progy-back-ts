@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { error } from './utils';
 
 export interface ViewData {
-  modelName: 'user' | 'role' | 'institution';
+  modelName: 'user' | 'role' | 'institution' | 'goal' | 'planning';
   fields: string[];
 }
 
