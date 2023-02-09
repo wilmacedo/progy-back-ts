@@ -27,15 +27,17 @@ export class GoalController {
     }
   }
 
-  async findMany(_: Request, response: Response) {
+  async findMany(request: Request, response: Response) {
+    const { planning_id } = request;
+
     try {
-      const goals = await prisma.goal.findMany();
+      const goals = await prisma.goal.findMany({ where: { planning_id } });
       if (goals.length === 0) {
         response.goal.error({ type: ErrorType.EMPTY });
         return;
       }
 
-      response.goal.show(goals);
+      response.goal.many(goals);
     } catch (e) {
       response.goal.error(e);
     }
