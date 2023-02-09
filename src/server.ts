@@ -26,5 +26,3 @@ server.on('error', error => onError(error, port));
 server.on('listening', () => {
   console.log('Server is running at', port);
 });
-
-export { app };

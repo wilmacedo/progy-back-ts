@@ -11,13 +11,13 @@ export class RoleController {
       },
     });
 
-    return response.json(role);
+    return response.status(200).json(role);
   }
 
   async findMany(_: Request, response: Response) {
     const roles = await prismaClient.role.findMany();
 
-    return response.json(roles);
+    return response.status(200).json(roles);
   }
 
   async findOne(request: Request, response: Response) {
