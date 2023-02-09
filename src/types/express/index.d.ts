@@ -10,6 +10,7 @@ declare global {
     interface Response {
       user: ViewResponse;
       role: ViewResponse;
+      institution: ViewResponse;
     }
   }
 }

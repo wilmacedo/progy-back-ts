@@ -1,9 +1,23 @@
 import { Router } from 'express';
-import userView from './user';
-import roleView from './role';
+
+import viewCreator, { ViewData } from './view';
 
 const router = Router();
-router.use(userView);
-router.use(roleView);
+const viewsData: ViewData[] = [
+  {
+    modelName: 'role',
+    fields: ['id', 'name'],
+  },
+  {
+    modelName: 'user',
+    fields: ['id', 'name', 'email', 'role_id', 'institution_id'],
+  },
+];
+
+viewsData.forEach(({ modelName, fields }) => {
+  router.use((request, response, next) => {
+    viewCreator({ request, response, next, modelName, fields });
+  });
+});
 
 export default router;
