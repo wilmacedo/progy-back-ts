@@ -69,7 +69,7 @@ export class User {
   async update(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.user.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
@@ -79,13 +79,13 @@ export class User {
       data: request.body,
     });
 
-    response.status(200).json(updateUser);
+    response.user.show(updateUser);
   }
 
   async delete(request: Request, response: Response) {
     const { id } = request.params;
     if (!id) {
-      response.status(400).json({ error: 'ID is missing' });
+      response.user.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
 
@@ -100,13 +100,13 @@ export class User {
 
     const user = await prisma.user.findFirst({ where: { email } });
     if (!user) {
-      response.status(404).json({ error: 'User not found' });
+      response.user.error({ type: ErrorType.NOT_FOUND });
       return;
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      response.status(401).json({ error: 'Password not match' });
+      response.user.error({ code: 401, message: 'Password not match' });
       return;
     }
 
