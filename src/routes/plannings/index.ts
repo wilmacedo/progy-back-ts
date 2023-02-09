@@ -4,6 +4,7 @@ import stateRouter from './state';
 import stageRouter from './stage';
 import perspectiveRouter from './perspective';
 import unitRouter from './unit';
+import mappRouter from './mapp';
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use('/states', stateRouter);
 router.use('/stages', stageRouter);
 router.use('/perspectives', perspectiveRouter);
 router.use('/units', unitRouter);
+router.use('/mapps', mappRouter);
 
 export default router;

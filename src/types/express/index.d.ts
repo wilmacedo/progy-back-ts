@@ -20,6 +20,7 @@ declare global {
       unit: ViewResponse;
       font: ViewResponse;
       perspective: ViewResponse;
+      mapp: ViewResponse;
     }
   }
 }

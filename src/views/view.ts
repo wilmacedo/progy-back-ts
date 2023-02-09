@@ -13,7 +13,8 @@ export interface ViewData {
     | 'stage'
     | 'unit'
     | 'font'
-    | 'perspective';
+    | 'perspective'
+    | 'mapp';
   fields: string[];
 }
 
