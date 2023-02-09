@@ -5,12 +5,16 @@ import viewCreator, { ViewData } from './view';
 const router = Router();
 const viewsData: ViewData[] = [
   {
+    modelName: 'user',
+    fields: ['id', 'name', 'email', 'role_id', 'institution_id'],
+  },
+  {
     modelName: 'role',
     fields: ['id', 'name'],
   },
   {
-    modelName: 'user',
-    fields: ['id', 'name', 'email', 'role_id', 'institution_id'],
+    modelName: 'institution',
+    fields: ['id', 'name', 'code'],
   },
 ];
 

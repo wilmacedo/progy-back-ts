@@ -2,11 +2,6 @@ import { Request, Response } from 'express';
 import { prisma } from '../database/client';
 import { ErrorType } from '../types';
 
-export interface RoleData {
-  id: number;
-  name: string;
-}
-
 export class RoleController {
   async create(request: Request, response: Response) {
     const fields = ['name'];

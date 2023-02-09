@@ -5,14 +5,6 @@ import jwt from 'jsonwebtoken';
 import { AuthData } from '../types/auth';
 import { ErrorType } from '../types';
 
-export interface UserData {
-  id: number;
-  name: string;
-  email: string;
-  role_id: number;
-  institution_id: number;
-}
-
 export class User {
   async create(request: Request, response: Response) {
     const fields = ['name', 'password', 'email', 'institution_id', 'role_id'];
