@@ -12,6 +12,7 @@ router.post('/login', controller.login);
 router.use(auth.verify, verify(roles.low), permission);
 
 router.get('/me', controller.me);
+router.post('/change-password', controller.updatePassword);
 
 router.use(auth.verify, verify(roles.high), permission);
 
