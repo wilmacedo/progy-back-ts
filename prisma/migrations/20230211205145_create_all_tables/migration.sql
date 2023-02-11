@@ -1,14 +1,43 @@
--- DropForeignKey
-ALTER TABLE "users" DROP CONSTRAINT "users_institution_id_fkey";
+-- CreateTable
+CREATE TABLE "roles" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "users" DROP CONSTRAINT "users_role_id_fkey";
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "institutions" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "institutions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "role_id" INTEGER NOT NULL,
+    "institution_id" INTEGER NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "plannings" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "sector" TEXT NOT NULL,
+    "sector" TEXT,
     "institution_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -91,6 +120,7 @@ CREATE TABLE "states" (
 CREATE TABLE "initiatives" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
     "unit_id" INTEGER NOT NULL,
     "perspective_id" INTEGER NOT NULL,
     "stage_id" INTEGER NOT NULL,
@@ -99,8 +129,9 @@ CREATE TABLE "initiatives" (
     "responsible_id" INTEGER NOT NULL,
     "budget_code" INTEGER NOT NULL,
     "mapp_id" INTEGER NOT NULL,
-    "file" BYTEA NOT NULL,
-    "comments" TEXT NOT NULL,
+    "planning_id" INTEGER NOT NULL,
+    "file" BYTEA,
+    "comments" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -117,9 +148,9 @@ CREATE TABLE "activities" (
     "planning_id" INTEGER NOT NULL,
     "date_start" TIMESTAMP(3) NOT NULL,
     "date_end" TIMESTAMP(3) NOT NULL,
-    "value" DECIMAL(4,2) NOT NULL,
-    "file" BYTEA NOT NULL,
-    "comments" TEXT NOT NULL,
+    "value" DECIMAL(10,2),
+    "file" BYTEA,
+    "comments" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -129,7 +160,7 @@ CREATE TABLE "activities" (
 -- CreateTable
 CREATE TABLE "pending_initiatives" (
     "id" SERIAL NOT NULL,
-    "initiative_id" INTEGER NOT NULL,
+    "initiative_id" INTEGER,
     "name" TEXT NOT NULL,
     "unit_id" INTEGER NOT NULL,
     "perspective_id" INTEGER NOT NULL,
@@ -141,8 +172,8 @@ CREATE TABLE "pending_initiatives" (
     "budget_code" INTEGER NOT NULL,
     "mapp_id" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
-    "file" BYTEA NOT NULL,
-    "comments" TEXT NOT NULL,
+    "file" BYTEA,
+    "comments" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -152,7 +183,7 @@ CREATE TABLE "pending_initiatives" (
 -- CreateTable
 CREATE TABLE "pending_activities" (
     "id" SERIAL NOT NULL,
-    "activity_id" INTEGER NOT NULL,
+    "activity_id" INTEGER,
     "name" TEXT NOT NULL,
     "initiative_id" INTEGER NOT NULL,
     "responsible_id" INTEGER NOT NULL,
@@ -191,6 +222,9 @@ CREATE TABLE "sent_emails" (
 
     CONSTRAINT "sent_emails_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -239,6 +273,9 @@ ALTER TABLE "initiatives" ADD CONSTRAINT "initiatives_responsible_id_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "initiatives" ADD CONSTRAINT "initiatives_mapp_id_fkey" FOREIGN KEY ("mapp_id") REFERENCES "mapps"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "initiatives" ADD CONSTRAINT "initiatives_planning_id_fkey" FOREIGN KEY ("planning_id") REFERENCES "plannings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "activities" ADD CONSTRAINT "activities_initiative_id_fkey" FOREIGN KEY ("initiative_id") REFERENCES "initiatives"("id") ON DELETE CASCADE ON UPDATE CASCADE;

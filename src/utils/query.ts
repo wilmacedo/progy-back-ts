@@ -16,7 +16,7 @@ interface PaginationParams {
 }
 
 export interface FilterParams {
-  [key: string]: string | number;
+  [key: string]: string | number | { [key: string]: number[] };
 }
 
 interface Options {
@@ -97,7 +97,7 @@ export default class QueryManager {
       options.take = pagination.take;
     }
 
-    if (filter) {
+    if (filter && Object.keys(filter).length > 0) {
       options.where = filter;
     }
 

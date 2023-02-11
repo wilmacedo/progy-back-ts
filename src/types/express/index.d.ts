@@ -22,6 +22,7 @@ declare global {
       perspective: ViewResponse;
       mapp: ViewResponse;
       initiative: ViewResponse;
+      activity: ViewResponse;
     }
   }
 }

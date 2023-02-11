@@ -48,6 +48,8 @@ export class InitiativeController {
       return;
     }
 
+    const body = { ...request.body, planning_id };
+
     try {
       const models = fields.map(field => {
         if (!field.includes('_id')) return;
@@ -78,14 +80,11 @@ export class InitiativeController {
         return true;
       });
 
-      const file = request.body.file ? request.body.file.buffer : undefined;
+      if (request.file) {
+        body.file = request.file.buffer;
+      }
 
       if (request.userData.role_id === roles.low[roles.low.length - 1]) {
-        const body = {
-          ...request.body,
-          ...(file && { file }),
-          planning_id,
-        };
         const stage = await prisma.stage.findFirst({
           where: {
             name: {
@@ -107,16 +106,11 @@ export class InitiativeController {
       }
 
       const initiative = await prisma.initiative.create({
-        data: {
-          ...request.body,
-          ...(file && { file }),
-          planning_id,
-        },
+        data: body,
       });
 
       response.initiative.created(initiative);
     } catch (e) {
-      console.log(e);
       response.initiative.error(e);
     }
   }

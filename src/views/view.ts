@@ -13,7 +13,8 @@ export type Models =
   | 'font'
   | 'perspective'
   | 'mapp'
-  | 'initiative';
+  | 'initiative'
+  | 'activity';
 
 type ViewModels = Models | 'form';
 

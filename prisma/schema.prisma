@@ -199,9 +199,9 @@ model Activity {
   planning_id     Int
   date_start      DateTime
   date_end        DateTime
-  value           Decimal           @db.Decimal(4, 2)
-  file            Bytes             @db.ByteA
-  comments        String
+  value           Decimal?          @db.Decimal(10, 2)
+  file            Bytes?            @db.ByteA
+  comments        String?
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
   PendingActivity PendingActivity[]

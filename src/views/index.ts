@@ -69,6 +69,24 @@ const viewsData: ViewData[] = [
       'totalActivities',
     ],
   },
+  {
+    modelName: 'activity',
+    fields: [
+      'id',
+      'name',
+      'responsible_id',
+      'responsible',
+      'date_start',
+      'date_end',
+      'state_id',
+      'state',
+      'initiative_id',
+      'initiative',
+      'file',
+      'value',
+      'comments',
+    ],
+  },
 ];
 
 viewsData.forEach(({ modelName, fields }) => {

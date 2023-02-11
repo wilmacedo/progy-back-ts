@@ -8,6 +8,7 @@ import mappRouter from './mapp';
 import fontRouter from './font';
 import initiativeRouter from './initiative';
 import pendingInitiativeRouter from './pendingInitiative';
+import activityRouter from './activity';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/mapps', mappRouter);
 router.use('/fonts', fontRouter);
 router.use('/initiatives', initiativeRouter);
 router.use('/pending-initiatives', pendingInitiativeRouter);
+router.use('/activities', activityRouter);
 
 export default router;
