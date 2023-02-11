@@ -49,6 +49,7 @@ const viewsData: ViewData[] = [
       'name',
       'code',
       'budget_code',
+      'initiative_id',
       'responsible_id',
       'responsible',
       'unit_id',

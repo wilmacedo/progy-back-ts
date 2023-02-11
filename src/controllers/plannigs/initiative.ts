@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../database/client';
+import { roles } from '../../middleware';
 import { ErrorType } from '../../types';
 import QueryManager, { FilterParams } from '../../utils/query';
 import { Models } from '../../views/view';
@@ -37,7 +38,6 @@ export class InitiativeController {
     });
 
     if (ids.length !== 7) {
-      console.log(ids);
       response.initiative.error({ type: ErrorType.MISSING_FIELD });
       return;
     }
@@ -80,10 +80,36 @@ export class InitiativeController {
 
       const file = request.body.file ? request.body.file.buffer : undefined;
 
+      if (request.userData.role_id === roles.low[roles.low.length - 1]) {
+        const body = {
+          ...request.body,
+          ...(file && { file }),
+          planning_id,
+        };
+        const stage = await prisma.stage.findFirst({
+          where: {
+            name: {
+              contains: 'Em Validação',
+            },
+          },
+        });
+
+        if (stage) {
+          body.stage_id = stage.id;
+        }
+
+        const pendingInitiative = await prisma.pendingInitiative.create({
+          data: body,
+        });
+
+        response.initiative.created(pendingInitiative);
+        return;
+      }
+
       const initiative = await prisma.initiative.create({
         data: {
           ...request.body,
-          file,
+          ...(file && { file }),
           planning_id,
         },
       });
@@ -156,7 +182,6 @@ export class InitiativeController {
 
       response.initiative.many(initiatives);
     } catch (e) {
-      console.log(e);
       response.initiative.error(e);
     }
   }
@@ -197,6 +222,38 @@ export class InitiativeController {
         where: { id: idNum },
         data: request.body,
       });
+
+      if (request.userData.role_id === roles.low[roles.low.length - 1]) {
+        console.log('entrou aqui');
+
+        const alreadyPending = await prisma.pendingInitiative.findFirst({
+          where: { initiative_id: idNum },
+        });
+        if (alreadyPending) {
+          response.initiative.error({
+            type: ErrorType.CUSTOM,
+            code: 406,
+            message: 'Initiative already registered for homologation',
+          });
+          return;
+        }
+
+        const pendingBody = { ...updateInitiative };
+        const fields = ['id', 'created_at', 'updated_at'];
+        fields.forEach(field => {
+          delete (pendingBody as any)[field];
+        });
+
+        const pending = await prisma.pendingInitiative.create({
+          data: {
+            ...pendingBody,
+            initiative_id: updateInitiative.id,
+          },
+        });
+
+        response.initiative.show(pending);
+        return;
+      }
 
       response.initiative.show(updateInitiative);
     } catch (e) {

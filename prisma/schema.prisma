@@ -213,7 +213,7 @@ model Activity {
 model PendingInitiative {
   id             Int          @id @default(autoincrement())
   initiative     Initiative?  @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
-  initiative_id  Int
+  initiative_id  Int?
   name           String
   unit           Unit?        @relation(fields: [unit_id], references: [id], onDelete: Cascade)
   unit_id        Int
@@ -244,7 +244,7 @@ model PendingInitiative {
 model PendingActivity {
   id             Int         @id @default(autoincrement())
   activity       Activity?   @relation(fields: [activity_id], references: [id], onDelete: Cascade)
-  activity_id    Int
+  activity_id    Int?
   name           String
   initiative     Initiative? @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
   initiative_id  Int

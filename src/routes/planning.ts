@@ -8,9 +8,9 @@ const router = Router();
 const controller = new PlanningController();
 const auth = new AuthController();
 
-router.use(auth.verify, verify(roles.high), permission);
-
 router.use('/:planning_id', getPlanning, planningRouter);
+
+router.use(auth.verify, verify(roles.high), permission);
 
 router.post('/', controller.create);
 router.get('/', controller.findMany);
