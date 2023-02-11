@@ -36,7 +36,6 @@ export class FormController {
       const planning = await prisma.planning.create({
         data: {
           name: planningName,
-          sector: '',
           Perspective: {
             create: request.body.perspectives,
           },
@@ -49,7 +48,7 @@ export class FormController {
           Font: {
             create: request.body.fonts,
           },
-          Goals: {
+          Goal: {
             create: request.body.goals,
           },
           State: {

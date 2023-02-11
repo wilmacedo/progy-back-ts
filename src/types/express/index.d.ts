@@ -21,6 +21,7 @@ declare global {
       font: ViewResponse;
       perspective: ViewResponse;
       mapp: ViewResponse;
+      initiative: ViewResponse;
     }
   }
 }

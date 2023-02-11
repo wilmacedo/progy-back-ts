@@ -51,7 +51,7 @@ model User {
 model Planning {
   id                Int                 @id @default(autoincrement())
   name              String
-  sector            String
+  sector            String?
   institution       Institution?        @relation(fields: [institution_id], references: [id], onDelete: Cascade)
   institution_id    Int
   created_at        DateTime            @default(now())
@@ -66,6 +66,7 @@ model Planning {
   PendingActivity   PendingActivity[]
   PendingInitiative PendingInitiative[]
   Mapp              Mapp[]
+  Initiative        Initiative[]
 
   @@map("plannings")
 }
@@ -156,6 +157,7 @@ model State {
 model Initiative {
   id                Int                 @id @default(autoincrement())
   name              String
+  code              String
   unit              Unit?               @relation(fields: [unit_id], references: [id], onDelete: Cascade)
   unit_id           Int
   perspective       Perspective?        @relation(fields: [perspective_id], references: [id], onDelete: Cascade)
@@ -171,8 +173,10 @@ model Initiative {
   budget_code       Int
   mapp              Mapp?               @relation(fields: [mapp_id], references: [id], onDelete: Cascade)
   mapp_id           Int
-  file              Bytes               @db.ByteA
-  comments          String
+  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id       Int
+  file              Bytes?              @db.ByteA
+  comments          String?
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   Activity          Activity[]
@@ -229,8 +233,8 @@ model PendingInitiative {
   mapp           Mapp?        @relation(fields: [mapp_id], references: [id], onDelete: Cascade)
   mapp_id        Int
   code           String
-  file           Bytes        @db.ByteA
-  comments       String
+  file           Bytes?       @db.ByteA
+  comments       String?
   created_at     DateTime     @default(now())
   updated_at     DateTime     @updatedAt
 

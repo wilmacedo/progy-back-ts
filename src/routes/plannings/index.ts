@@ -6,6 +6,7 @@ import perspectiveRouter from './perspective';
 import unitRouter from './unit';
 import mappRouter from './mapp';
 import fontRouter from './font';
+import initiativeRouter from './initiative';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/perspectives', perspectiveRouter);
 router.use('/units', unitRouter);
 router.use('/mapps', mappRouter);
 router.use('/fonts', fontRouter);
+router.use('/initiatives', initiativeRouter);
 
 export default router;

@@ -1,20 +1,24 @@
 import { NextFunction, Request, Response } from 'express';
 import { error } from './utils';
 
+export type Models =
+  | 'user'
+  | 'role'
+  | 'institution'
+  | 'goal'
+  | 'planning'
+  | 'state'
+  | 'stage'
+  | 'unit'
+  | 'font'
+  | 'perspective'
+  | 'mapp'
+  | 'initiative';
+
+type ViewModels = Models | 'form';
+
 export interface ViewData {
-  modelName:
-    | 'user'
-    | 'role'
-    | 'institution'
-    | 'goal'
-    | 'planning'
-    | 'form'
-    | 'state'
-    | 'stage'
-    | 'unit'
-    | 'font'
-    | 'perspective'
-    | 'mapp';
+  modelName: ViewModels;
   fields: string[];
 }
 

@@ -4,7 +4,7 @@ import { ErrorType } from '../types';
 
 export class PlanningController {
   async create(request: Request, response: Response) {
-    const fields = ['name', 'sector', 'institution_id'];
+    const fields = ['name', 'institution_id'];
     if (fields.filter(field => request.body[field] === undefined).length > 0) {
       response.planning.error({ type: ErrorType.MISSING_FIELD });
       return;

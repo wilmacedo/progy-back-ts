@@ -42,6 +42,29 @@ const viewsData: ViewData[] = [
     modelName: 'font',
     fields: ['id', 'name', 'code', 'date', 'value', 'other_value'],
   },
+  {
+    modelName: 'initiative',
+    fields: [
+      'id',
+      'name',
+      'code',
+      'budget_code',
+      'responsible_id',
+      'responsible',
+      'unit_id',
+      'unit',
+      'perspective_id',
+      'perspective',
+      'stage_id',
+      'stage',
+      'font_id',
+      'goal_id',
+      'goal',
+      'goal_id',
+      'mapp_id',
+      'mapp',
+    ],
+  },
 ];
 
 viewsData.forEach(({ modelName, fields }) => {
