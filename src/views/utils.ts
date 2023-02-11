@@ -7,6 +7,7 @@ export interface ViewResponse {
   created: (data: any) => void;
   show: (data: any) => void;
   many: (data: any) => void;
+  file: (data: any) => void;
 }
 
 export interface ResponseData<ModelData> {
@@ -56,6 +57,10 @@ const error =
       case ErrorType.NOT_FOUND_PLANNING:
         code = 404;
         message = 'Planning not found';
+        break;
+      case ErrorType.EMPTY_FILE:
+        code = 404;
+        message = 'File is empty';
         break;
       case ErrorType.EMPTY:
         code = 404;

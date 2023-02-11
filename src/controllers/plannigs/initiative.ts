@@ -277,4 +277,32 @@ export class InitiativeController {
       response.initiative.error(e);
     }
   }
+
+  async getFile(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.initiative.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      const initiative = await prisma.initiative.findFirst({
+        where: { id: idNum },
+      });
+      if (!initiative) {
+        response.initiative.error({ type: ErrorType.NOT_FOUND });
+        return;
+      }
+
+      if (!initiative.file) {
+        response.initiative.error({ type: ErrorType.EMPTY_FILE });
+        return;
+      }
+
+      response.initiative.file(initiative);
+    } catch (e) {
+      response.initiative.error(e);
+    }
+  }
 }

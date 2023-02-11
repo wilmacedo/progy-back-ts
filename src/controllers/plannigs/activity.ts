@@ -137,4 +137,32 @@ export default class ActivityController {
       response.activity.error(e);
     }
   }
+
+  async getFile(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.activity.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      const activity = await prisma.activity.findFirst({
+        where: { id: idNum },
+      });
+      if (!activity) {
+        response.activity.error({ type: ErrorType.NOT_FOUND });
+        return;
+      }
+
+      if (!activity.file) {
+        response.activity.error({ type: ErrorType.EMPTY_FILE });
+        return;
+      }
+
+      response.activity.file(activity);
+    } catch (e) {
+      response.activity.error(e);
+    }
+  }
 }

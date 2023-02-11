@@ -15,5 +15,6 @@ router.use(auth.verify, verify(roles.low), permission);
 router.post('/', multerMiddleware, controller.create);
 router.get('/', controller.findMany);
 router.get('/:id', controller.findOne);
+router.get('/:id/file', controller.getFile);
 
 export default router;

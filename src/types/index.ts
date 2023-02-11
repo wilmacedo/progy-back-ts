@@ -2,6 +2,7 @@ export enum ErrorType {
   MISSING_FIELD,
   NOT_FOUND,
   NOT_FOUND_PLANNING,
+  EMPTY_FILE,
   EMPTY,
   PERMISSION,
   CUSTOM,

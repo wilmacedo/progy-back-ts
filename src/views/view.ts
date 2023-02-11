@@ -45,6 +45,12 @@ const many = <ModelData>(data: ModelData[], fields: string[]) => {
   return { data: data.map(item => one(item, fields).data), total: data.length };
 };
 
+const buffer = <ModelData>(data: ModelData) => ({
+  data: {
+    file: Buffer.from((data as any).file).toString('base64'),
+  },
+});
+
 const view = <ModelData>({
   response,
   next,
@@ -56,6 +62,7 @@ const view = <ModelData>({
     created: (data: ModelData) => response.status(201).json(one(data, fields)),
     show: (data: ModelData) => response.status(200).json(one(data, fields)),
     many: (data: ModelData[]) => response.status(200).json(many(data, fields)),
+    file: (data: ModelData) => response.status(200).json(buffer(data)),
   };
 
   next();

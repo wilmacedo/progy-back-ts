@@ -12,6 +12,7 @@ router.get('/', controller.findMany);
 router.get('/:id', controller.findOne);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
+router.get('/:id/file', controller.getFile);
 
 router.use(auth.verify, verify(roles.high), permission);
 router.delete('/:id', controller.delete);
