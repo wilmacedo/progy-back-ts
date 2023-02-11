@@ -73,6 +73,7 @@ export default class PendingActivityController {
       const fields = ['id', 'activity_id', 'created_at', 'updated_at'];
       fields.forEach(field => delete (body as any)[field]);
 
+      // TODO: Review all flow of review/homologation and updates
       if (!pending.activity_id) {
         const activity = await prisma.activity.create({ data: body });
         await prisma.pendingActivity.delete({ where: { id: idNum } });
