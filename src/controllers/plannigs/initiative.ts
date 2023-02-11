@@ -224,8 +224,6 @@ export class InitiativeController {
       });
 
       if (request.userData.role_id === roles.low[roles.low.length - 1]) {
-        console.log('entrou aqui');
-
         const alreadyPending = await prisma.pendingInitiative.findFirst({
           where: { initiative_id: idNum },
         });

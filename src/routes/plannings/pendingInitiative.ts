@@ -11,5 +11,7 @@ router.use(auth.verify, verify(roles.high), permission);
 
 router.get('/', controller.findMany);
 router.get('/:id', controller.findOne);
+router.delete('/decline/:id', controller.decline);
+router.get('/accept/:id', controller.accept);
 
 export default router;
