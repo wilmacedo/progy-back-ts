@@ -7,7 +7,7 @@ import formRouter from './form';
 
 const router = Router();
 
-router.use('/role', roleRouter);
+router.use('/roles', roleRouter);
 router.use('/institution', institutionRouter);
 router.use('/users', userRouter);
 router.use('/plannings', planningRouter);
