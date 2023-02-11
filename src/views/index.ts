@@ -63,6 +63,9 @@ const viewsData: ViewData[] = [
       'goal_id',
       'mapp_id',
       'mapp',
+      'totalValue',
+      'executed',
+      'totalActivities',
     ],
   },
 ];

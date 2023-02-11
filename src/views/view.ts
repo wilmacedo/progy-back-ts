@@ -32,7 +32,7 @@ const one = <ModelData>(data: ModelData, fields: string[]) => {
   let item = {};
   fields.forEach(field => {
     const value = data[field as keyof ModelData];
-    if (value) {
+    if (value || value === 0) {
       item = { ...item, ...{ [field]: value } };
     }
   });

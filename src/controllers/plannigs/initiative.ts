@@ -117,6 +117,43 @@ export class InitiativeController {
         return;
       }
 
+      if (request.query.metrics) {
+        const metrics = await Promise.all(
+          initiatives.map(async initiative => {
+            const activities = await prisma.activity.findMany({
+              where: { initiative_id: initiative.id },
+              include: { state: { select: { name: true } } },
+            });
+
+            let totalValue = 0;
+            let dones = 0;
+
+            if (activities.length > 0) {
+              activities.forEach(activity => {
+                totalValue += Number(activity.value);
+
+                if (activity.state?.name === 'Concluído') {
+                  dones++;
+                }
+              });
+            }
+
+            const executed =
+              activities.length === 0 ? 0 : dones / activities.length;
+
+            return {
+              ...initiative,
+              totalValue,
+              executed,
+              totalActivities: activities.length,
+            };
+          }),
+        );
+
+        response.initiative.many(metrics);
+        return;
+      }
+
       response.initiative.many(initiatives);
     } catch (e) {
       console.log(e);
