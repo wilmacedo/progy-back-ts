@@ -218,10 +218,13 @@ export class InitiativeController {
 
     const idNum = Number(id);
     try {
-      const updateInitiative = await prisma.initiative.update({
+      const initiative = await prisma.initiative.findUnique({
         where: { id: idNum },
-        data: request.body,
       });
+      if (!initiative) {
+        response.initiative.error({ type: ErrorType.NOT_FOUND });
+        return;
+      }
 
       if (request.userData.role_id === roles.low[roles.low.length - 1]) {
         const alreadyPending = await prisma.pendingInitiative.findFirst({
@@ -236,7 +239,7 @@ export class InitiativeController {
           return;
         }
 
-        const pendingBody = { ...updateInitiative };
+        const pendingBody = { ...initiative, ...request.body };
         const fields = ['id', 'created_at', 'updated_at'];
         fields.forEach(field => {
           delete (pendingBody as any)[field];
@@ -245,13 +248,18 @@ export class InitiativeController {
         const pending = await prisma.pendingInitiative.create({
           data: {
             ...pendingBody,
-            initiative_id: updateInitiative.id,
+            initiative_id: initiative.id,
           },
         });
 
         response.initiative.show(pending);
         return;
       }
+
+      const updateInitiative = await prisma.initiative.update({
+        where: { id: idNum },
+        data: request.body,
+      });
 
       response.initiative.show(updateInitiative);
     } catch (e) {
