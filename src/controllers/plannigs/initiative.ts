@@ -225,19 +225,13 @@ export class InitiativeController {
           where: { initiative_id: idNum },
         });
         if (alreadyPending) {
-          response.initiative.error({
-            type: ErrorType.CUSTOM,
-            code: 406,
-            message: 'Initiative already registered for homologation',
-          });
+          response.initiative.error({ type: ErrorType.ALREADY_CHANGE_REQUEST });
           return;
         }
 
         const pendingBody = { ...initiative, ...request.body };
         const fields = ['id', 'created_at', 'updated_at'];
-        fields.forEach(field => {
-          delete (pendingBody as any)[field];
-        });
+        fields.forEach(field => delete (pendingBody as any)[field]);
 
         const pending = await prisma.pendingInitiative.create({
           data: {

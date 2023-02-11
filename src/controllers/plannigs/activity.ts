@@ -57,7 +57,6 @@ export default class ActivityController {
     }
 
     try {
-      console.log(body);
       if (request.userData.role_id === roles.low[roles.low.length - 1]) {
         const activity = await prisma.pendingActivity.create({ data: body });
 
@@ -133,6 +132,72 @@ export default class ActivityController {
       }
 
       response.activity.show(activity);
+    } catch (e) {
+      response.activity.error(e);
+    }
+  }
+
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.activity.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      const activity = await prisma.activity.findUnique({
+        where: { id: idNum },
+      });
+      if (!activity) {
+        response.activity.error({ type: ErrorType.MISSING_FIELD });
+        return;
+      }
+
+      if (request.userData.role_id === roles.low[roles.low.length - 1]) {
+        const alreadyPending = await prisma.pendingActivity.findFirst({
+          where: { activity_id: idNum },
+        });
+        if (alreadyPending) {
+          response.activity.error({ type: ErrorType.ALREADY_CHANGE_REQUEST });
+          return;
+        }
+
+        const pendingBody = { ...activity, ...request.body };
+        const fields = ['id', 'created_at', 'updated_at'];
+        fields.forEach(field => delete pendingBody[field]);
+
+        const pending = await prisma.pendingActivity.create({
+          data: { ...pendingBody, activity_id: activity.id },
+        });
+
+        response.activity.show(pending);
+        return;
+      }
+
+      const updateActivity = await prisma.activity.update({
+        where: { id: idNum },
+        data: request.body,
+      });
+
+      response.activity.show(updateActivity);
+    } catch (e) {
+      response.activity.error(e);
+    }
+  }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.activity.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      await prisma.activity.delete({ where: { id: idNum } });
+
+      response.status(204).json();
     } catch (e) {
       response.activity.error(e);
     }

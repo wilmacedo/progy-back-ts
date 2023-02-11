@@ -4,6 +4,7 @@ export enum ErrorType {
   NOT_FOUND_PLANNING,
   EMPTY_FILE,
   EMPTY,
+  ALREADY_CHANGE_REQUEST,
   PERMISSION,
   CUSTOM,
 }

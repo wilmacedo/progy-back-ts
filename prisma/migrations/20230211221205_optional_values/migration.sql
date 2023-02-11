@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "pending_activities" ALTER COLUMN "value" DROP NOT NULL,
+ALTER COLUMN "value" SET DATA TYPE DECIMAL(10,2),
+ALTER COLUMN "file" DROP NOT NULL,
+ALTER COLUMN "comments" DROP NOT NULL;

@@ -9,6 +9,7 @@ import fontRouter from './font';
 import initiativeRouter from './initiative';
 import pendingInitiativeRouter from './pendingInitiative';
 import activityRouter from './activity';
+import pendingActivitiesRouter from './pendingActivity';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/fonts', fontRouter);
 router.use('/initiatives', initiativeRouter);
 router.use('/pending-initiatives', pendingInitiativeRouter);
 router.use('/activities', activityRouter);
+router.use('/pending-activities', pendingActivitiesRouter);
 
 export default router;

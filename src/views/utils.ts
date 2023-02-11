@@ -66,6 +66,10 @@ const error =
         code = 404;
         message = capitalize(name) + 's are empty';
         break;
+      case ErrorType.ALREADY_CHANGE_REQUEST:
+        code = 406;
+        message = capitalize(name) + ' already registed for homologation';
+        break;
       case ErrorType.PERMISSION:
         code = 403;
         message = 'Unauthorized request';
