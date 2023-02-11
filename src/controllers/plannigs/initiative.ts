@@ -132,16 +132,53 @@ export class InitiativeController {
     }
 
     const idNum = Number(id);
+    const queryManager = new QueryManager(request);
+    const options = queryManager.build({ id: idNum });
     try {
-      const initiative = await prisma.initiative.findUnique({
-        where: { id: idNum },
-      });
+      const initiative = await prisma.initiative.findFirst(options);
       if (!initiative) {
         response.initiative.error({ type: ErrorType.NOT_FOUND });
         return;
       }
 
       response.initiative.show(initiative);
+    } catch (e) {
+      response.initiative.error(e);
+    }
+  }
+
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.initiative.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      const updateInitiative = await prisma.initiative.update({
+        where: { id: idNum },
+        data: request.body,
+      });
+
+      response.initiative.show(updateInitiative);
+    } catch (e) {
+      response.initiative.error(e);
+    }
+  }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+    if (!id) {
+      response.initiative.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const idNum = Number(id);
+    try {
+      await prisma.initiative.delete({ where: { id: idNum } });
+
+      response.status(204).json();
     } catch (e) {
       response.initiative.error(e);
     }
