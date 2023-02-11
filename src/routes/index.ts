@@ -9,7 +9,7 @@ const router = Router();
 
 router.use('/role', roleRouter);
 router.use('/institution', institutionRouter);
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 router.use('/plannings', planningRouter);
 router.use('/form', formRouter);
 
