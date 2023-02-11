@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../database/client';
+import { roles } from '../middleware';
 import { ErrorType } from '../types';
 
 export class PlanningController {
@@ -21,9 +22,17 @@ export class PlanningController {
     }
   }
 
-  async findMany(_: Request, response: Response) {
+  async findMany(request: Request, response: Response) {
     try {
-      const plannings = await prisma.planning.findMany();
+      const options = {
+        include: { institution: { select: { name: true } } },
+        where: {},
+      };
+      if (request.userData.role_id !== roles.high[0]) {
+        options.where = { institution_id: request.userData.institution_id };
+      }
+
+      const plannings = await prisma.planning.findMany(options);
       if (plannings.length === 0) {
         response.planning.error({ type: ErrorType.EMPTY });
         return;
