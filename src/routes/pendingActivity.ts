@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import PendingActivityController from '../../controllers/plannigs/pendingActivity';
-import { permission, roles, verify } from '../../middleware';
-import { AuthController } from '../../middleware/auth';
+import PendingActivityController from '../controllers/pendingActivity';
+import { permission, roles, verify } from '../middleware';
+import { AuthController } from '../middleware/auth';
 
 const router = Router();
 const controller = new PendingActivityController();

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import PendingInitiativeController from '../../controllers/plannigs/pendingInitiative';
-import { permission, roles, verify } from '../../middleware';
-import { AuthController } from '../../middleware/auth';
+import PendingInitiativeController from '../controllers/pendingInitiative';
+import { permission, roles, verify } from '../middleware';
+import { AuthController } from '../middleware/auth';
 
 const router = Router();
 const controller = new PendingInitiativeController();

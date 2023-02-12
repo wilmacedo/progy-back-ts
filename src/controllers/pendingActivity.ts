@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma } from '../../database/client';
-import { ErrorType } from '../../types';
+import { prisma } from '../database/client';
+import { ErrorType } from '../types';
 
 export default class PendingActivityController {
   async findMany(_: Request, response: Response) {
