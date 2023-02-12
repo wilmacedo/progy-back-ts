@@ -59,6 +59,7 @@ const viewsData: ViewData[] = [
       'stage_id',
       'stage',
       'font_id',
+      'font',
       'goal_id',
       'goal',
       'goal_id',
