@@ -7,11 +7,14 @@ const router = Router();
 const controller = new MappController();
 const auth = new AuthController();
 
+router.use(auth.verify, verify(roles.low), permission);
+
+router.get('/', controller.findMany);
+router.get('/:id', controller.findOne);
+
 router.use(auth.verify, verify(roles.high), permission);
 
 router.post('/', controller.create);
-router.get('/', controller.findMany);
-router.get('/:id', controller.findOne);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 

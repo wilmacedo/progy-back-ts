@@ -34,12 +34,14 @@ model User {
   name              String
   password          String
   email             String              @unique
-  role              Role?               @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  role              Role                @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  role_id           Int
   institution       Institution?        @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  institution_id    Int?
+  unit              Unit?               @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  unit_id           Int?
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
-  role_id           Int
-  institution_id    Int
   Initiative        Initiative[]
   Activity          Activity[]
   PendingActivity   PendingActivity[]
@@ -120,6 +122,7 @@ model Unit {
   updated_at        DateTime            @updatedAt
   Initiative        Initiative[]
   PendingInitiative PendingInitiative[]
+  User              User[]
 
   @@map("units")
 }

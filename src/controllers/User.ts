@@ -36,6 +36,7 @@ export class User {
     const users = await prisma.user.findMany({
       include: {
         institution: { select: { id: true, name: true, code: true } },
+        role: { select: { name: true } },
       },
     });
     if (users.length === 0) {
@@ -129,15 +130,16 @@ export class User {
       const userData: AuthData = {
         id: user.id,
         role_id: user.role_id,
-        institution_id: user.institution_id,
+        ...(user.institution_id && { institution_id: user.institution_id }),
+        ...(user.unit_id && { unit_id: user.unit_id }),
       };
       const token = jwt.sign(userData, process.env.JWT_SECRET as string);
 
       response.status(200).json({
-        role: user.role_id,
+        role_id: user.role_id,
         token,
         institution_id: user.institution_id,
-        // unit_id: user.unit_id,
+        unit_id: user.unit_id,
       });
     } catch (e) {
       response.user.error(e);
