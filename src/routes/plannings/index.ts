@@ -22,6 +22,6 @@ router.use('/mapps', mappRouter);
 router.use('/fonts', fontRouter);
 router.use('/initiatives', initiativeRouter);
 router.use('/activities', activityRouter);
-router.use('/test', dashboardRouter);
+router.use('/dashboard', dashboardRouter);
 
 export default router;
