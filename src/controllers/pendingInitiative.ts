@@ -106,7 +106,6 @@ export default class PendingInitiativeController {
 
       response.initiative.show(initiative);
     } catch (e) {
-      console.log(e);
       response.initiative.error(e);
     }
   }

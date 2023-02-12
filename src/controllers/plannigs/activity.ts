@@ -68,7 +68,6 @@ export default class ActivityController {
 
       response.activity.show(activity);
     } catch (e) {
-      console.log(e);
       response.activity.error(e);
     }
   }

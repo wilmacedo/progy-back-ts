@@ -42,6 +42,8 @@ export default class QueryManager {
     const toPopulate: string[] = (populate as string).split(',');
     const include: IncludeParams = {};
     toPopulate.forEach(field => {
+      if (field.length === 0) return;
+
       if (fields) {
         const select: SelectParams = {};
         fields.forEach(f => {
