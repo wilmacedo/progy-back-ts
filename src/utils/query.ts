@@ -49,6 +49,7 @@ export default class QueryManager {
         fields.forEach(f => {
           select[f] = true;
         });
+
         include[field] = { select };
       } else {
         include[field] = { select: { id: true, name: true } };
@@ -83,6 +84,33 @@ export default class QueryManager {
     }
 
     return {} as PaginationParams;
+  }
+
+  filter() {
+    const { filter } = this.request.query;
+    if (!filter) {
+      return {};
+    }
+
+    try {
+      const parsedFilter = JSON.parse(filter as string);
+      if (typeof parsedFilter !== 'object') return {};
+
+      let result = {};
+
+      Object.keys(parsedFilter).forEach(key => {
+        if (Array.isArray(parsedFilter[key])) {
+          result = { ...result, [key]: { in: [...parsedFilter[key]] } };
+          return;
+        }
+
+        result = { ...result, [key]: parsedFilter[key] };
+      });
+
+      return result;
+    } catch (e) {
+      console.error('Error on parse filter', e);
+    }
   }
 
   build(filter?: FilterParams): Options {

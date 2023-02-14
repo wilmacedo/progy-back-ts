@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthData } from '../types/auth';
 import { ErrorType } from '../types';
+import QueryManager from '../utils/query';
 
 export class User {
   async create(request: Request, response: Response) {
@@ -32,19 +33,27 @@ export class User {
     }
   }
 
-  async findMany(_: Request, response: Response) {
-    const users = await prisma.user.findMany({
-      include: {
-        institution: { select: { id: true, name: true, code: true } },
-        role: { select: { name: true } },
-      },
-    });
-    if (users.length === 0) {
-      response.user.error({ type: ErrorType.EMPTY });
-      return;
-    }
+  async findMany(request: Request, response: Response) {
+    const queryManager = new QueryManager(request);
+    const filter = queryManager.filter();
 
-    response.user.many(users);
+    try {
+      const users = await prisma.user.findMany({
+        include: {
+          institution: { select: { id: true, name: true, code: true } },
+          role: { select: { name: true } },
+        },
+        where: filter,
+      });
+      if (users.length === 0) {
+        response.user.error({ type: ErrorType.EMPTY });
+        return;
+      }
+
+      response.user.many(users);
+    } catch (e) {
+      response.user.error(e);
+    }
   }
 
   async findOne(request: Request, response: Response) {
