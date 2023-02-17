@@ -8,8 +8,8 @@ import mappRouter from './mapp';
 import fontRouter from './font';
 import initiativeRouter from './initiative';
 import activityRouter from './activity';
-
 import dashboardRouter from './dashboard';
+import sheetRouter from './sheet';
 
 const router = Router();
 
@@ -23,5 +23,6 @@ router.use('/fonts', fontRouter);
 router.use('/initiatives', initiativeRouter);
 router.use('/activities', activityRouter);
 router.use('/dashboard', dashboardRouter);
+router.use('/sheet', sheetRouter);
 
 export default router;
