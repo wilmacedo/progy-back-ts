@@ -10,6 +10,7 @@ import initiativeRouter from './initiative';
 import activityRouter from './activity';
 import dashboardRouter from './dashboard';
 import sheetRouter from './sheet';
+import reportRouter from './report';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/initiatives', initiativeRouter);
 router.use('/activities', activityRouter);
 router.use('/dashboard', dashboardRouter);
 router.use('/sheet', sheetRouter);
+router.use('/report', reportRouter);
 
 export default router;
