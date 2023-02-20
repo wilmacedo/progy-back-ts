@@ -54,6 +54,11 @@ export class FormController {
           State: {
             create: request.body.states,
           },
+          institution: {
+            connect: {
+              id: institution.id,
+            },
+          },
         },
       });
 

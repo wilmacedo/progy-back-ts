@@ -10,9 +10,9 @@ datasource db {
 model Role {
   id         Int      @id @default(autoincrement())
   name       String
-  User       User[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  User       User[]
 
   @@map("roles")
 }
@@ -20,11 +20,11 @@ model Role {
 model Institution {
   id         Int        @id @default(autoincrement())
   name       String
-  code       String
-  User       User[]
+  code       String     @unique
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   Planning   Planning[]
+  User       User[]
 
   @@map("institutions")
 }
@@ -34,18 +34,19 @@ model User {
   name              String
   password          String
   email             String              @unique
-  role              Role                @relation(fields: [role_id], references: [id], onDelete: Cascade)
-  role_id           Int
-  institution       Institution?        @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  role              String
+  Role              Role?               @relation(fields: [role_id], references: [id])
+  role_id           Int?
+  institution       Institution?        @relation(fields: [institution_id], references: [id])
   institution_id    Int?
-  unit              Unit?               @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  unit              Unit?               @relation(fields: [unit_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unit_id           Int?
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
-  Initiative        Initiative[]
   Activity          Activity[]
-  PendingActivity   PendingActivity[]
   PendingInitiative PendingInitiative[]
+  PendingActivity   PendingActivity[]
+  Initiative        Initiative[]
 
   @@map("users")
 }
@@ -54,7 +55,7 @@ model Planning {
   id                Int                 @id @default(autoincrement())
   name              String
   sector            String?
-  institution       Institution?        @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  institution       Institution         @relation(fields: [institution_id], references: [id], onDelete: Cascade)
   institution_id    Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
@@ -73,10 +74,129 @@ model Planning {
   @@map("plannings")
 }
 
+model SequelizeMeta {
+  name String @id @db.VarChar(255)
+}
+
+model Activity {
+  id              Int               @id @default(autoincrement())
+  name            String
+  initiative      Initiative        @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
+  initiative_id   Int
+  responsible     String
+  Responsible     User?             @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
+  responsible_id  Int?
+  state           State             @relation(fields: [state_id], references: [id], onDelete: Cascade)
+  state_id        Int
+  planning        Planning          @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id     Int
+  date_start      DateTime
+  date_end        DateTime
+  value           Decimal?          @db.Decimal
+  file            Bytes?
+  comments        String?
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  PendingActivity PendingActivity[]
+  SentEmail       SentEmail[]
+
+  @@map("activities")
+}
+
+model Initiative {
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  code                String
+  file                Bytes?
+  comments            String?
+  budget_code         String?
+  unit                Unit                @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  unit_id             Int
+  perspective         Perspective         @relation(fields: [perspective_id], references: [id], onDelete: Cascade)
+  perspective_id      Int
+  stage               Stage               @relation(fields: [stage_id], references: [id], onDelete: Cascade)
+  stage_id            Int
+  font                Font                @relation(fields: [font_id], references: [id], onDelete: Cascade)
+  font_id             Int
+  goal                Goal                @relation(fields: [goal_id], references: [id], onDelete: Cascade)
+  goal_id             Int
+  responsible         String
+  Responsible         User?               @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
+  responsible_id      Int?
+  mapp                Mapp?               @relation(fields: [mapp_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mapp_id             Int?
+  planning            Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id         Int
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+  Activity            Activity[]
+  pending_activities  PendingActivity[]
+  pending_initiatives PendingInitiative[]
+
+  @@map("initiatives")
+}
+
+model PendingActivity {
+  id             Int        @id @default(autoincrement())
+  activity       Activity?  @relation(fields: [activity_id], references: [id], onDelete: Cascade)
+  activity_id    Int?
+  name           String
+  initiative     Initiative @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
+  initiative_id  Int
+  responsible    String
+  Responsible    User?      @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
+  responsible_id Int?
+  state          State      @relation(fields: [state_id], references: [id], onDelete: Cascade)
+  state_id       Int
+  planning       Planning   @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id    Int
+  date_start     DateTime
+  date_end       DateTime
+  value          Decimal?   @db.Decimal
+  file           Bytes?
+  comments       String?
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+
+  @@map("pending_activities")
+}
+
+model PendingInitiative {
+  id             Int         @id @default(autoincrement())
+  name           String
+  code           String
+  budget_code    String?
+  file           Bytes?
+  comments       String?
+  initiative     Initiative? @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
+  initiative_id  Int?
+  unit           Unit        @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  unit_id        Int
+  perspective    Perspective @relation(fields: [perspective_id], references: [id], onDelete: Cascade)
+  perspective_id Int
+  stage          Stage       @relation(fields: [stage_id], references: [id], onDelete: Cascade)
+  stage_id       Int
+  font           Font        @relation(fields: [font_id], references: [id], onDelete: Cascade)
+  font_id        Int
+  goal           Goal        @relation(fields: [goal_id], references: [id], onDelete: Cascade)
+  goal_id        Int
+  mapp           Mapp?       @relation(fields: [mapp_id], references: [id], onDelete: Cascade)
+  mapp_id        Int?
+  responsible    String
+  Responsible    User?       @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
+  responsible_id Int?
+  planning       Planning    @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id    Int
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+
+  @@map("pending_initiatives")
+}
+
 model Perspective {
   id                Int                 @id @default(autoincrement())
   name              String
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
@@ -86,23 +206,10 @@ model Perspective {
   @@map("perspectives")
 }
 
-model Goal {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id       Int
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @updatedAt
-  Initiative        Initiative[]
-  PendingInitiative PendingInitiative[]
-
-  @@map("goals")
-}
-
 model Stage {
   id                Int                 @id @default(autoincrement())
   name              String
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
@@ -112,11 +219,24 @@ model Stage {
   @@map("stages")
 }
 
+model State {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  planning        Planning          @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id     Int
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  Activity        Activity[]
+  PendingActivity PendingActivity[]
+
+  @@map("states")
+}
+
 model Unit {
   id                Int                 @id @default(autoincrement())
   name              String
   code              String
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
@@ -131,147 +251,36 @@ model Font {
   id                Int                 @id @default(autoincrement())
   name              String
   code              String
-  date              DateTime
+  date              DateTime?
   value             Int
-  other_value       Int
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  other_value       Int?
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning_id       Int
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  PendingInitiative PendingInitiative[]
+  Initiative        Initiative[]
+
+  @@map("fonts")
+}
+
+model Goal {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   Initiative        Initiative[]
   PendingInitiative PendingInitiative[]
 
-  @@map("fonts")
-}
-
-model State {
-  id              Int               @id @default(autoincrement())
-  name            String
-  planning        Planning?         @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id     Int
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  Activity        Activity[]
-  PendingActivity PendingActivity[]
-
-  @@map("states")
-}
-
-model Initiative {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  code              String
-  unit              Unit?               @relation(fields: [unit_id], references: [id], onDelete: Cascade)
-  unit_id           Int
-  perspective       Perspective?        @relation(fields: [perspective_id], references: [id], onDelete: Cascade)
-  perspective_id    Int
-  stage             Stage?              @relation(fields: [stage_id], references: [id], onDelete: Cascade)
-  stage_id          Int
-  font              Font?               @relation(fields: [font_id], references: [id], onDelete: Cascade)
-  font_id           Int
-  goal              Goal?               @relation(fields: [goal_id], references: [id], onDelete: Cascade)
-  goal_id           Int
-  responsible       User?               @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
-  responsible_id    Int
-  budget_code       Int
-  mapp              Mapp?               @relation(fields: [mapp_id], references: [id], onDelete: Cascade)
-  mapp_id           Int
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id       Int
-  file              Bytes?              @db.ByteA
-  comments          String?
-  created_at        DateTime            @default(now())
-  updated_at        DateTime            @updatedAt
-  Activity          Activity[]
-  PendingActivity   PendingActivity[]
-  PendingInitiative PendingInitiative[]
-
-  @@map("initiatives")
-}
-
-model Activity {
-  id              Int               @id @default(autoincrement())
-  name            String
-  initiative      Initiative?       @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
-  initiative_id   Int
-  responsible     User?             @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
-  responsible_id  Int
-  state           State?            @relation(fields: [state_id], references: [id], onDelete: Cascade)
-  state_id        Int
-  planning        Planning?         @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id     Int
-  date_start      DateTime
-  date_end        DateTime
-  value           Decimal?          @db.Decimal(10, 2)
-  file            Bytes?            @db.ByteA
-  comments        String?
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  PendingActivity PendingActivity[]
-  SentEmail       SentEmail[]
-
-  @@map("activities")
-}
-
-model PendingInitiative {
-  id             Int          @id @default(autoincrement())
-  initiative     Initiative?  @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
-  initiative_id  Int?
-  name           String
-  unit           Unit?        @relation(fields: [unit_id], references: [id], onDelete: Cascade)
-  unit_id        Int
-  perspective    Perspective? @relation(fields: [perspective_id], references: [id], onDelete: Cascade)
-  perspective_id Int
-  stage          Stage?       @relation(fields: [stage_id], references: [id], onDelete: Cascade)
-  stage_id       Int
-  font           Font?        @relation(fields: [font_id], references: [id], onDelete: Cascade)
-  font_id        Int
-  goal           Goal?        @relation(fields: [goal_id], references: [id], onDelete: Cascade)
-  goal_id        Int
-  responsible    User?        @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
-  responsible_id Int
-  planning       Planning?    @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id    Int
-  budget_code    Int
-  mapp           Mapp?        @relation(fields: [mapp_id], references: [id], onDelete: Cascade)
-  mapp_id        Int
-  code           String
-  file           Bytes?       @db.ByteA
-  comments       String?
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @updatedAt
-
-  @@map("pending_initiatives")
-}
-
-model PendingActivity {
-  id             Int         @id @default(autoincrement())
-  activity       Activity?   @relation(fields: [activity_id], references: [id], onDelete: Cascade)
-  activity_id    Int?
-  name           String
-  initiative     Initiative? @relation(fields: [initiative_id], references: [id], onDelete: Cascade)
-  initiative_id  Int
-  responsible    User?       @relation(fields: [responsible_id], references: [id], onDelete: Cascade)
-  responsible_id Int
-  state          State?      @relation(fields: [state_id], references: [id], onDelete: Cascade)
-  state_id       Int
-  planning       Planning?   @relation(fields: [planning_id], references: [id], onDelete: Cascade)
-  planning_id    Int
-  date_start     DateTime
-  date_end       DateTime
-  value          Decimal?    @db.Decimal(10, 2)
-  file           Bytes?      @db.ByteA
-  comments       String?
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
-
-  @@map("pending_activities")
+  @@map("goals")
 }
 
 model Mapp {
   id                Int                 @id @default(autoincrement())
   name              String
-  planning          Planning?           @relation(fields: [planning_id], references: [id], onDelete: Cascade)
+  planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt

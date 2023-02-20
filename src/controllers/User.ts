@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { AuthData } from '../types/auth';
 import { ErrorType } from '../types';
 import QueryManager from '../utils/query';
+import { alias } from '../middleware/roles';
 
 export class User {
   async create(request: Request, response: Response) {
@@ -41,7 +42,7 @@ export class User {
       const users = await prisma.user.findMany({
         include: {
           institution: { select: { id: true, name: true, code: true } },
-          role: { select: { name: true } },
+          Role: { select: { name: true } },
         },
         where: filter,
       });
@@ -136,16 +137,18 @@ export class User {
         return;
       }
 
+      const role_id = user.role_id || alias[user.role];
+
       const userData: AuthData = {
         id: user.id,
-        role_id: user.role_id,
+        role_id,
         ...(user.institution_id && { institution_id: user.institution_id }),
         ...(user.unit_id && { unit_id: user.unit_id }),
       };
       const token = jwt.sign(userData, process.env.JWT_SECRET as string);
 
       response.status(200).json({
-        role_id: user.role_id,
+        role_id,
         token,
         institution_id: user.institution_id,
         unit_id: user.unit_id,

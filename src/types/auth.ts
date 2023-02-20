@@ -4,3 +4,7 @@ export interface AuthData {
   institution_id?: number;
   unit_id?: number;
 }
+
+export interface RoleAlias {
+  [key: string]: number;
+}

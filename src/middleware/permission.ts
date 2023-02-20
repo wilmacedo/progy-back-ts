@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { prisma } from '../database/client';
 import { ErrorType } from '../types';
+import { alias } from './roles';
 
 const permission = async (
   request: Request,
@@ -15,7 +16,9 @@ const permission = async (
     return;
   }
 
-  if (user.role_id === 4 || user.role_id === 3) {
+  const roleId = user.role_id || alias[user.role];
+
+  if (roleId === 4 || roleId === 3) {
     next();
     return;
   }

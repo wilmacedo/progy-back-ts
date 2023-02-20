@@ -45,7 +45,7 @@ export class SheetController {
           stage: { select: { name: true } },
           font: { select: { name: true } },
           unit: { select: { name: true } },
-          responsible: { select: { name: true } },
+          Responsible: { select: { name: true } },
         },
       });
 
@@ -100,12 +100,15 @@ export class SheetController {
           percent = Number(percent.toFixed(1));
         }
 
+        let responsible = initiative.Responsible?.name;
+        if (!responsible) (responsible as any) = initiative.responsible;
+
         const values = [
           initiative.name,
           initiative.totalActivities,
           `${percent}%`,
           initiative.code,
-          initiative.responsible?.name,
+          responsible,
           initiative.unit?.name,
           initiative.stage?.name,
           initiative.font?.name,

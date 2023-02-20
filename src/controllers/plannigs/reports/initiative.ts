@@ -18,7 +18,7 @@ export class InitiativeReportController {
         stage: { select: { name: true } },
         font: { select: { name: true } },
         unit: { select: { name: true } },
-        responsible: { select: { name: true } },
+        Responsible: { select: { name: true } },
       },
     });
     if (initiatives.length === 0) {
@@ -53,7 +53,7 @@ export class InitiativeReportController {
       let executed: string | number = (dones / activities.length) * 100;
       if (executed % 1 !== 0) executed = executed.toFixed(1);
 
-      let responsible = initiative.responsible?.name;
+      let responsible = initiative.Responsible?.name;
       if (!responsible) (responsible as any) = initiative.responsible;
 
       rows.push([
