@@ -1,9 +1,5 @@
 import * as dotenv from 'dotenv';
-import registrationMail from './jobs/registrationMail';
+import Queue from './lib/queue';
 dotenv.config();
 
-import mailQueue from './lib/queue';
-
-mailQueue.process(job => {
-  registrationMail.handle(job.data as any);
-});
+Queue.process();

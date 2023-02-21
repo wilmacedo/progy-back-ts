@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsx src/server.ts",
-    "dev": "npm-run-all dev:*",
-    "dev:server": "tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "dev:queue": "tsx watch src/queue.ts",
     "build": "tsup src"
   },
@@ -34,7 +33,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
     "prisma": "^4.10.0",
     "ts-node": "^10.9.1",
