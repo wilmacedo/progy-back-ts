@@ -47,6 +47,7 @@ model User {
   PendingInitiative PendingInitiative[]
   PendingActivity   PendingActivity[]
   Initiative        Initiative[]
+  ConfirmedEmail    ConfirmedEmail[]
 
   @@map("users")
 }
@@ -300,4 +301,15 @@ model SentEmail {
   updated_at      DateTime  @updatedAt
 
   @@map("sent_emails")
+}
+
+model ConfirmedEmail {
+  id         Int      @id @default(autoincrement())
+  confirmed  Boolean  @default(false)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("confirmed_emails")
 }
