@@ -176,6 +176,7 @@ export class InitiativeController {
 
       response.initiative.many(initiatives);
     } catch (e) {
+      console.log(e);
       response.initiative.error(e);
     }
   }

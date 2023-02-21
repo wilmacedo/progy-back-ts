@@ -29,7 +29,7 @@ export default class ActivityController {
     if (request.body.dateEnd < request.body.dateStart) {
       response.activity.error({
         type: ErrorType.CUSTOM,
-        code: 400,
+        statusCode: 400,
         message: 'The end date must be greater than the start date.',
       });
       return;
@@ -87,7 +87,7 @@ export default class ActivityController {
       if (initiatives.length === 0) {
         response.activity.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Initiative not found',
         });
         return;
@@ -225,6 +225,57 @@ export default class ActivityController {
       }
 
       response.activity.file(activity);
+    } catch (e) {
+      response.activity.error(e);
+    }
+  }
+
+  async getDelayed(request: Request, response: Response) {
+    const { planning_id } = request;
+    if (!planning_id) {
+      response.activity.error({ type: ErrorType.NOT_FOUND_PLANNING });
+      return;
+    }
+
+    try {
+      let filter: any = {};
+      const unit_id = request.userData.unit_id;
+      if (unit_id) {
+        const initiatives = await prisma.initiative.findMany({
+          where: { unit_id },
+        });
+        if (initiatives.length === 0) {
+          response.initiative.error({ type: ErrorType.EMPTY });
+          return;
+        }
+
+        const ids = initiatives.map(initiative => initiative.id);
+        filter = { id: { in: ids } };
+      }
+
+      const activities = await prisma.activity.findMany({
+        where: { initiative: filter },
+        include: { state: { select: { name: true } } },
+      });
+      if (activities.length === 0) {
+        response.activity.error({ type: ErrorType.EMPTY });
+        return;
+      }
+
+      const delayed = activities.filter(activity => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const today = new Date().getTime();
+        const date = new Date(activity.date_end).getTime();
+
+        const doneDate = Math.round((date - today) / oneDay);
+        const doneStates = ['Concluído', 'Suspenso', 'Cancelado'];
+
+        if (doneDate < 0 && !doneStates.includes(activity.state?.name)) {
+          return activity;
+        }
+      });
+
+      response.activity.many(delayed);
     } catch (e) {
       response.activity.error(e);
     }

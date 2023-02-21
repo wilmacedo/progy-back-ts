@@ -9,7 +9,7 @@ export default class PendingInitiativeController {
       if (initiatives.length === 0) {
         response.initiative.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending initiatives are empty',
         });
         return;
@@ -36,7 +36,7 @@ export default class PendingInitiativeController {
       if (!initiative) {
         response.initiative.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending initiative not found',
         });
         return;
@@ -63,7 +63,7 @@ export default class PendingInitiativeController {
       if (!pending) {
         response.initiative.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending initiative not found',
         });
         return;
@@ -76,7 +76,7 @@ export default class PendingInitiativeController {
         if (!stage) {
           response.initiative.error({
             type: ErrorType.CUSTOM,
-            code: 404,
+            statusCode: 404,
             message: 'Could not find stage "Homologação"',
           });
           return;

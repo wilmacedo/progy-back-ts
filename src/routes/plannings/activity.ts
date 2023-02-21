@@ -13,6 +13,7 @@ const multerMiddleware = multer(multerConfig).single('file');
 router.use(auth.verify, verify(roles.low), permission);
 
 router.post('/', multerMiddleware, controller.create);
+router.get('/delayed', controller.getDelayed);
 router.get('/', controller.findMany);
 router.get('/:id', controller.findOne);
 router.put('/:id', controller.update);

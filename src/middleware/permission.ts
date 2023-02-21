@@ -12,7 +12,7 @@ const permission = async (
     where: { id: request.userData.id },
   });
   if (!user) {
-    response.user.error({ type: ErrorType.NOT_FOUND });
+    response.user.error({ type: ErrorType.CORRUPTED_TOKEN });
     return;
   }
 

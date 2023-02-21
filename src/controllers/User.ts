@@ -164,7 +164,7 @@ export class User {
     if (isNaN(id)) {
       response.user.error({
         type: ErrorType.CUSTOM,
-        code: 400,
+        statusCode: 400,
         message: 'Invalid token',
       });
       return;
@@ -184,7 +184,7 @@ export class User {
     if (!id || isNaN(id)) {
       response.user.error({
         type: ErrorType.CUSTOM,
-        code: 400,
+        statusCode: 400,
         message: 'Invalid token',
       });
       return;
@@ -199,7 +199,7 @@ export class User {
     if (newPassword.length < 6) {
       response.user.error({
         type: ErrorType.CUSTOM,
-        code: 400,
+        statusCode: 400,
         message: 'Password must be at least 6 characters',
       });
       return;
@@ -219,7 +219,7 @@ export class User {
       if (!passwordMatch) {
         response.user.error({
           type: ErrorType.CUSTOM,
-          code: 401,
+          statusCode: 401,
           message: 'Password not match',
         });
         return;

@@ -9,7 +9,7 @@ export default class PendingActivityController {
       if (activities.length === 0) {
         response.activity.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending activities are empty',
         });
         return;
@@ -36,7 +36,7 @@ export default class PendingActivityController {
       if (!activity) {
         response.activity.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending activity not found',
         });
         return;
@@ -63,7 +63,7 @@ export default class PendingActivityController {
       if (!pending) {
         response.activity.error({
           type: ErrorType.CUSTOM,
-          code: 404,
+          statusCode: 404,
           message: 'Pending activity not found',
         });
         return;

@@ -15,6 +15,31 @@ export interface ResponseData<ModelData> {
   total?: number;
 }
 
+interface CategoryError {
+  [key: number]: ErrorType[];
+}
+
+const codeGen = (errorType: ErrorType) => {
+  const categories: CategoryError = {
+    1: [ErrorType.MISSING_FIELD, ErrorType.ALREADY_CHANGE_REQUEST],
+    2: [
+      ErrorType.NOT_FOUND,
+      ErrorType.NOT_FOUND_PLANNING,
+      ErrorType.EMPTY_FILE,
+      ErrorType.EMPTY,
+    ],
+    3: [ErrorType.PERMISSION, ErrorType.CORRUPTED_TOKEN],
+  };
+
+  for (const key in categories) {
+    if (categories[key].includes(errorType)) {
+      const index = categories[key].indexOf(errorType);
+
+      return `E${key}0${String(index).padStart(2, '0')}`;
+    }
+  }
+};
+
 const error =
   (response: Response, name: string) => (error: ResponseError | any) => {
     const { type } = error;
@@ -24,20 +49,20 @@ const error =
       return;
     }
 
-    let code, message;
+    let statusCode, message;
 
     if (typeof error.code === 'string') {
       switch (error.code) {
         case 'P2025':
-          code = 404;
+          statusCode = 404;
           message = capitalize(name) + ' not found';
           break;
         default:
-          code = 500;
+          statusCode = 500;
           message = error.message;
       }
 
-      response.status(code).json({ error: message });
+      response.status(statusCode).json({ error: message });
     }
 
     if (error.type === undefined) {
@@ -47,43 +72,47 @@ const error =
 
     switch (type) {
       case ErrorType.MISSING_FIELD:
-        code = 400;
+        statusCode = 400;
         message = 'One or more fields in the body are missing';
         break;
       case ErrorType.NOT_FOUND:
-        code = 404;
+        statusCode = 404;
         message = capitalize(name) + 's not found';
         break;
       case ErrorType.NOT_FOUND_PLANNING:
-        code = 404;
+        statusCode = 404;
         message = 'Planning not found';
         break;
       case ErrorType.EMPTY_FILE:
-        code = 404;
+        statusCode = 404;
         message = 'File is empty';
         break;
       case ErrorType.EMPTY:
-        code = 404;
+        statusCode = 404;
         message = capitalize(name) + 's are empty';
         break;
       case ErrorType.ALREADY_CHANGE_REQUEST:
-        code = 406;
+        statusCode = 406;
         message = capitalize(name) + ' already registed for homologation';
         break;
       case ErrorType.PERMISSION:
-        code = 403;
-        message = 'Unauthorized request';
+        statusCode = 403;
+        message = `Unauthorized request`;
+        break;
+      case ErrorType.CORRUPTED_TOKEN:
+        statusCode = 403;
+        message = 'Token expired or corrupted';
         break;
       case ErrorType.CUSTOM:
-        code = Number(error.code);
+        statusCode = Number(error.statusCode);
         message = error.message;
         break;
       default:
-        code = 500;
+        statusCode = 500;
         message = error.message;
     }
 
-    response.status(code).json({ error: message });
+    response.status(statusCode).json({ error: message, code: codeGen(type) });
   };
 
 export { error };
