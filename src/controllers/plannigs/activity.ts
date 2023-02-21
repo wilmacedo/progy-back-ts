@@ -124,7 +124,8 @@ export default class ActivityController {
     const queryManager = new QueryManager(request);
     const options = queryManager.build({ id: idNum });
     try {
-      const activity = await prisma.activity.findFirst(options);
+      console.log(options);
+      const activity = await prisma.activity.findUnique(options as any);
       if (!activity) {
         response.activity.error({ type: ErrorType.NOT_FOUND });
         return;
@@ -178,6 +179,8 @@ export default class ActivityController {
         where: { id: idNum },
         data: request.body,
       });
+
+      console.log('deu ceto');
 
       response.activity.show(updateActivity);
     } catch (e) {

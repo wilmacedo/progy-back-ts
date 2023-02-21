@@ -132,9 +132,13 @@ export default class QueryManager {
     const requestFilter = this.filter();
     if (requestFilter && Object.keys(requestFilter).length > 0) {
       options.where = requestFilter;
+    }
 
-      if (filter) {
+    if (filter) {
+      if (options.where) {
         options.where = { ...options.where, ...filter };
+      } else {
+        options.where = filter;
       }
     }
 
