@@ -255,7 +255,10 @@ export default class ActivityController {
 
       const activities = await prisma.activity.findMany({
         where: { initiative: filter },
-        include: { state: { select: { name: true } } },
+        include: {
+          state: { select: { name: true } },
+          initiative: { select: { name: true } },
+        },
       });
       if (activities.length === 0) {
         response.activity.error({ type: ErrorType.EMPTY });

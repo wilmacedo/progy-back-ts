@@ -129,8 +129,13 @@ export default class QueryManager {
       options.take = pagination.take;
     }
 
-    if (filter && Object.keys(filter).length > 0) {
-      options.where = filter;
+    const requestFilter = this.filter();
+    if (requestFilter && Object.keys(requestFilter).length > 0) {
+      options.where = requestFilter;
+
+      if (filter) {
+        options.where = { ...options.where, ...filter };
+      }
     }
 
     return options;
