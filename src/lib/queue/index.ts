@@ -1,4 +1,4 @@
-import * as jobs from '../jobs';
+import * as jobs from '../../jobs';
 
 const queues = Object.values(jobs).map(job => new job().buildQueue());
 
@@ -18,9 +18,10 @@ const process = () =>
     });
 
     queue.bull.on('failed', (job, err) => {
-      console.log('Job Failed', queue.name, job.data);
-      console.log(err);
+      console.log(`Job ${queue.name} Failed`, err);
     });
   });
 
-export default { queues, add, process };
+const Queue = { queues, add, process };
+
+export default Queue;

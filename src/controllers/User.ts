@@ -1,11 +1,14 @@
-import { Request, Response } from 'express';
-import { prisma } from '../database/client';
 import bcrypt from 'bcrypt';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthData } from '../types/auth';
-import { ErrorType } from '../types';
-import QueryManager from '../utils/query';
+import { prisma } from '../database/client';
+import { JobType } from '../jobs/types';
+import Queue from '../lib/queue';
+
 import { alias } from '../middleware/roles';
+import { ErrorType } from '../types';
+import { AuthData } from '../types/auth';
+import QueryManager from '../utils/query';
 
 export class User {
   async create(request: Request, response: Response) {
@@ -16,20 +19,44 @@ export class User {
     }
 
     const params = request.body;
-
-    const encryptPassword = await bcrypt.hash(
-      params.password,
-      bcrypt.genSaltSync(10),
-    );
-    params.password = encryptPassword;
-
     try {
+      const role = await prisma.role.findUnique({
+        where: { id: params.role_id },
+      });
+      if (!role) {
+        response.role.error({ type: ErrorType.NOT_FOUND });
+        return;
+      }
+
+      const encryptPassword = await bcrypt.hash(
+        params.password,
+        bcrypt.genSaltSync(10),
+      );
+      params.password = encryptPassword;
+
+      const hasExist = await prisma.user.findUnique({
+        where: { email: params.email },
+      });
+      if (hasExist) {
+        response.user.error({ type: ErrorType.EMAIL_ALREADY_USED });
+        return;
+      }
+
       const user = await prisma.user.create({
         data: params,
       });
 
+      await prisma.confirmedEmail.create({
+        data: {
+          user_id: user.id,
+        },
+      });
+
+      Queue.add(JobType.REGISTRATION_ACCOUNT, user);
+
       response.user.created(user);
     } catch (e) {
+      console.log(e);
       response.user.error(e);
     }
   }
@@ -137,7 +164,7 @@ export class User {
         return;
       }
 
-      const role_id = user.role_id || alias[user.role];
+      const role_id = user.role_id || alias[user.role || ''];
 
       const userData: AuthData = {
         id: user.id,

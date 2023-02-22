@@ -34,7 +34,7 @@ model User {
   name              String
   password          String
   email             String              @unique
-  role              String
+  role              String?
   Role              Role?               @relation(fields: [role_id], references: [id])
   role_id           Int?
   institution       Institution?        @relation(fields: [institution_id], references: [id])

@@ -21,7 +21,11 @@ interface CategoryError {
 
 const codeGen = (errorType: ErrorType) => {
   const categories: CategoryError = {
-    1: [ErrorType.MISSING_FIELD, ErrorType.ALREADY_CHANGE_REQUEST],
+    1: [
+      ErrorType.MISSING_FIELD,
+      ErrorType.ALREADY_CHANGE_REQUEST,
+      ErrorType.EMAIL_ALREADY_USED,
+    ],
     2: [
       ErrorType.NOT_FOUND,
       ErrorType.NOT_FOUND_PLANNING,
@@ -102,6 +106,10 @@ const error =
       case ErrorType.CORRUPTED_TOKEN:
         statusCode = 403;
         message = 'Token expired or corrupted';
+        break;
+      case ErrorType.EMAIL_ALREADY_USED:
+        statusCode = 409;
+        message = 'Email already in use';
         break;
       case ErrorType.CUSTOM:
         statusCode = Number(error.statusCode);
