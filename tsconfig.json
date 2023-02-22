@@ -6,7 +6,8 @@
     "strict": true,
     "lib": ["esnext"],
     "esModuleInterop": true,
+    "module": "ES6",
+    "moduleResolution": "node",
     "typeRoots": ["./src/types", "./node_modules/@types"]
-  },
-  "exclude": ["src/**/*.html"]
+  }
 }
