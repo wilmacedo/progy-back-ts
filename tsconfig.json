@@ -7,5 +7,6 @@
     "lib": ["esnext"],
     "esModuleInterop": true,
     "typeRoots": ["./src/types", "./node_modules/@types"]
-  }
+  },
+  "exclude": ["src/**/*.html"]
 }

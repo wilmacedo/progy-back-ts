@@ -16,7 +16,7 @@ const permission = async (
     return;
   }
 
-  const roleId = user.role_id || alias[user.role];
+  const roleId = user.role_id || alias[user.role || ''];
 
   if (roleId === 4 || roleId === 3) {
     next();
