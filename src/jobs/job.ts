@@ -1,11 +1,11 @@
 import Queue from 'bull';
 import { redisConfig } from '../config/redis';
-import { JobQueue } from './types';
+import { JobQueue, JobType } from './types';
 
 export default abstract class Job<T> {
-  key: string;
+  key: JobType;
 
-  constructor(key: string) {
+  constructor(key: JobType) {
     this.key = key;
   }
 

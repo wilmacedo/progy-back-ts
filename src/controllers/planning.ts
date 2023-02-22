@@ -34,7 +34,6 @@ export class PlanningController {
 
       const plannings = await prisma.planning.findMany(options);
       if (plannings.length === 0) {
-        console.log('ola');
         response.planning.error({ type: ErrorType.EMPTY });
         return;
       }
