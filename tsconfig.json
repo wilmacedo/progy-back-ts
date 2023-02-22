@@ -1,13 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "sourceMap": true,
-    "outDir": "dist",
+    "target": "ESNext",
+    "module": "ESNext",
     "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true,
-    "module": "ES6",
+    "importHelpers": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "lib": ["esnext"],
     "typeRoots": ["./src/types", "./node_modules/@types"]
-  }
+  },
+  "exclude": ["node_modules", "**/*.specs.ts", "./dist/**/*"]
 }
