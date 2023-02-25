@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     strategy:
@@ -51,4 +51,4 @@ jobs:
             cd ${{secrets.REMOTE_TARGET}}
             yarn
             yarn prisma migrate deploy
-            /home/deploy/.yarn/bin/pm2 restart ${{secrets.REMOTE_APP_NAME}}
+            /home/${{secrets.REMOTE_USER}}/.yarn/bin/pm2 restart ${{secrets.REMOTE_APP_NAME}}
