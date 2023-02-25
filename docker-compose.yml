@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  database:
+    image: postgres
+    container_name: database
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      - DATABASE_URL=postgres://postgres:admin@localhost:5433/progy?schema=public
+      - PORT=3334
+    volumes:
+      - pgdata:/data/postgres
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
+volumes:
+  pgdata:
+    driver: local
