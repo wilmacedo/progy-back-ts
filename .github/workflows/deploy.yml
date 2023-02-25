@@ -10,6 +10,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: Stage
+      url: 'https://api-stage.progy.com.br'
 
     strategy:
       matrix:
