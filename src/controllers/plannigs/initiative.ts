@@ -149,8 +149,6 @@ export class InitiativeController {
         return;
       }
 
-      console.log(count);
-
       const totalPages = queryManager.totalPages(count || -1);
 
       if (request.query.metrics) {
