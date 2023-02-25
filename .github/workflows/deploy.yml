@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14.x]
 
     steps:
       - name: 📥 Checkouting...
@@ -33,7 +33,7 @@ jobs:
       - name: 📦 Deploying application...
         uses: appleboy/scp-action@master
         with:
-          key: ${{secrets.SSH_KEY}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
           host: ${{secrets.REMOTE_HOST}}
           username: ${{secrets.REMOTE_USER}}
           port: ${{secrets.REMOTE_PORT}}
@@ -46,7 +46,7 @@ jobs:
           host: ${{secrets.REMOTE_HOST}}
           username: ${{secrets.REMOTE_USER}}
           port: ${{secrets.REMOTE_PORT}}
-          key: ${{secrets.SSH_KEY}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
             cd ${{secrets.REMOTE_TARGET}}
             yarn
