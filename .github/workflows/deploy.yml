@@ -35,7 +35,7 @@ jobs:
         with:
           key: ${{secrets.SSH_KEY}}
           host: ${{secrets.REMOTE_HOST}}
-          usernme: ${{secrets.REMOTE_USER}}
+          username: ${{secrets.REMOTE_USER}}
           port: ${{secrets.REMOTE_PORT}}
           source: '., !node_modules'
           target: ${{secrets.REMOTE_TARGET}}
@@ -44,7 +44,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.REMOTE_HOST}}
-          usernme: ${{secrets.REMOTE_USER}}
+          username: ${{secrets.REMOTE_USER}}
           port: ${{secrets.REMOTE_PORT}}
           key: ${{secrets.SSH_KEY}}
           script: |
