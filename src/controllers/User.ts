@@ -56,7 +56,6 @@ export class User {
 
       response.user.created(user);
     } catch (e) {
-      console.log(e);
       response.user.error(e);
     }
   }

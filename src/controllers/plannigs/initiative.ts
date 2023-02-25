@@ -131,11 +131,27 @@ export class InitiativeController {
     const options = queryManager.build(filter);
 
     try {
-      const initiatives = await prisma.initiative.findMany(options);
+      let initiatives, count;
+      if (request.query.pagination) {
+        const transaction = await prisma.$transaction([
+          prisma.initiative.count({ where: options.where }),
+          prisma.initiative.findMany(options),
+        ]);
+
+        count = transaction[0];
+        initiatives = transaction[1];
+      } else {
+        initiatives = await prisma.initiative.findMany(options);
+      }
+
       if (initiatives.length === 0) {
         response.initiative.error({ type: ErrorType.EMPTY });
         return;
       }
+
+      console.log(count);
+
+      const totalPages = queryManager.totalPages(count || -1);
 
       if (request.query.metrics) {
         const metrics = await Promise.all(
@@ -170,13 +186,12 @@ export class InitiativeController {
           }),
         );
 
-        response.initiative.many(metrics);
+        response.initiative.many(metrics, totalPages);
         return;
       }
 
-      response.initiative.many(initiatives);
+      response.initiative.many(initiatives, totalPages);
     } catch (e) {
-      console.log(e);
       response.initiative.error(e);
     }
   }

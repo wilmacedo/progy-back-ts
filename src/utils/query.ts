@@ -115,6 +115,21 @@ export default class QueryManager {
     }
   }
 
+  totalPages(total: number) {
+    const { pagination } = this.request.query;
+    if (!pagination) return;
+
+    if (total < 0) return;
+
+    try {
+      const { perPage } = JSON.parse(pagination as string);
+
+      return Math.floor(total / perPage);
+    } catch (e) {
+      console.error('Error on parse pagination', e);
+    }
+  }
+
   build(filter?: FilterParams): Options {
     const options: Options = {};
 

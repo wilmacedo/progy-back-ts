@@ -41,8 +41,16 @@ const one = <ModelData>(data: ModelData, fields: string[]) => {
   return { data: item };
 };
 
-const many = <ModelData>(data: ModelData[], fields: string[]) => {
-  return { data: data.map(item => one(item, fields).data), total: data.length };
+const many = <ModelData>(
+  data: ModelData[],
+  fields: string[],
+  totalPages?: number,
+) => {
+  return {
+    data: data.map(item => one(item, fields).data),
+    total: data.length,
+    ...(totalPages && { totalPages }),
+  };
 };
 
 const buffer = <ModelData>(data: ModelData) => ({
@@ -61,7 +69,8 @@ const view = <ModelData>({
     error: error(response, modelName),
     created: (data: ModelData) => response.status(201).json(one(data, fields)),
     show: (data: ModelData) => response.status(200).json(one(data, fields)),
-    many: (data: ModelData[]) => response.status(200).json(many(data, fields)),
+    many: (data: ModelData[], totalPages?: number) =>
+      response.status(200).json(many(data, fields, totalPages)),
     file: (data: ModelData) => response.status(200).json(buffer(data)),
   };
 

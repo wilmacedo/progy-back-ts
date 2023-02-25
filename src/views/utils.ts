@@ -6,7 +6,7 @@ export interface ViewResponse {
   error: (error: ResponseError | any) => void;
   created: (data: any) => void;
   show: (data: any) => void;
-  many: (data: any) => void;
+  many: (data: any, totalPages?: number) => void;
   file: (data: any) => void;
 }
 

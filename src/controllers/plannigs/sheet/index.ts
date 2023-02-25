@@ -30,7 +30,6 @@ export class SheetController {
   async generate(request: Request, response: Response) {
     const { table } = request.params;
     const { unit } = request.body;
-    console.log(table, unit);
     if (!unit || !table) {
       response.planning.error({ type: ErrorType.MISSING_FIELD });
       return;

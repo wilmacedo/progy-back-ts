@@ -101,13 +101,27 @@ export default class ActivityController {
     const options = queryManager.build(filter);
 
     try {
-      const activities = await prisma.activity.findMany(options);
+      let activities, count;
+      if (request.query.pagination) {
+        const transaction = await prisma.$transaction([
+          prisma.activity.count({ where: options.where }),
+          prisma.activity.findMany(options),
+        ]);
+
+        count = transaction[0];
+        activities = transaction[1];
+      } else {
+        activities = await prisma.activity.findMany(options);
+      }
+
       if (activities.length === 0) {
         response.activity.error({ type: ErrorType.NOT_FOUND });
         return;
       }
 
-      response.activity.many(activities);
+      const totalPages = queryManager.totalPages(count || -1);
+
+      response.activity.many(activities, totalPages);
     } catch (e) {
       response.activity.error(e);
     }
