@@ -224,6 +224,7 @@ model Stage {
 model State {
   id              Int               @id @default(autoincrement())
   name            String            @db.VarChar(255)
+  color           Int?
   planning        Planning          @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id     Int
   created_at      DateTime          @default(now())
