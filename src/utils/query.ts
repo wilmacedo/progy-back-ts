@@ -42,9 +42,9 @@ export default class QueryManager {
     const toPopulate: string[] = (populate as string).split(',');
     const include: IncludeParams = {};
     toPopulate.forEach(field => {
-      if (field === 'responsible') field = 'Responsible';
-
       if (field.length === 0) return;
+
+      if (field === 'responsible') field = 'Responsible';
 
       if (fields) {
         const select: SelectParams = {};
@@ -54,7 +54,15 @@ export default class QueryManager {
 
         include[field] = { select };
       } else {
-        include[field] = { select: { id: true, name: true } };
+        const toPopFields = ['id', 'name'];
+        if (field === 'stage') toPopFields.push('color');
+
+        let select = {};
+        for (const f of toPopFields) {
+          select = { ...select, [f]: true };
+        }
+
+        include[field] = { select };
       }
     });
 

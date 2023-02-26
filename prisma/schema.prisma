@@ -210,6 +210,7 @@ model Perspective {
 model Stage {
   id                Int                 @id @default(autoincrement())
   name              String
+  color             Int?
   planning          Planning            @relation(fields: [planning_id], references: [id], onDelete: Cascade)
   planning_id       Int
   created_at        DateTime            @default(now())
