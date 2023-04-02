@@ -25,6 +25,7 @@ const codeGen = (errorType: ErrorType) => {
       ErrorType.MISSING_FIELD,
       ErrorType.ALREADY_CHANGE_REQUEST,
       ErrorType.EMAIL_ALREADY_USED,
+      ErrorType.EMAIL_NOT_VALID,
     ],
     2: [
       ErrorType.NOT_FOUND,

@@ -22,4 +22,6 @@ router.get('/:id', controller.findOne);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 
+router.post('/invite', controller.sendInvite);
+
 export default router;

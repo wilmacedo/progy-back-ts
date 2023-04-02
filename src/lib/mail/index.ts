@@ -2,6 +2,7 @@ import nodemailer, { Transporter } from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { SMTP_CONFIG } from '../../config/smtp';
 
 interface MailOptions {
@@ -49,7 +50,8 @@ export class Mail {
       attachments: [
         {
           filename: 'logo.png',
-          path: __dirname + '/images/logo.png',
+          path:
+            path.dirname(fileURLToPath(import.meta.url)) + '/images/logo.png',
           cid: 'logo',
         },
       ],

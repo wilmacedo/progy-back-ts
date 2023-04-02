@@ -30,7 +30,7 @@ const viewsData: ViewData[] = [
   },
   {
     modelName: 'planning',
-    fields: ['id', 'name', 'institution_id', 'institution'],
+    fields: ['id', 'name', 'institution_id', 'institution', 'created_at'],
   },
   { modelName: 'form', fields: [] },
   { modelName: 'stage', fields: ['id', 'name', 'color'] },

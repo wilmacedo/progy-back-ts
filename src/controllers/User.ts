@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { validateMail } from 'utils';
 import { prisma } from '../database/client';
 import { JobType } from '../jobs/types';
 import Queue from '../lib/queue';
@@ -174,10 +175,15 @@ export class User {
       const token = jwt.sign(userData, process.env.JWT_SECRET as string);
 
       response.status(200).json({
-        role_id,
-        token,
-        institution_id: user.institution_id,
-        unit_id: user.unit_id,
+        data: {
+          role_id,
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },
+        },
       });
     } catch (e) {
       response.user.error(e);
@@ -267,5 +273,33 @@ export class User {
     } catch (e) {
       response.user.error(e);
     }
+  }
+
+  async sendInvite(request: Request, response: Response) {
+    const { email, institution_id, role_id } = request.body;
+    if (!email || !validateMail(email)) {
+      response.user.error({ type: ErrorType.EMAIL_NOT_VALID });
+      return;
+    }
+
+    if (!institution_id || Number(institution_id) < 1) {
+      response.user.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    if (!role_id || Number(institution_id) < 1) {
+      response.user.error({ type: ErrorType.MISSING_FIELD });
+      return;
+    }
+
+    const user = await prisma.user.findFirst({ where: { email } });
+    if (user) {
+      response.user.error({ type: ErrorType.EMAIL_ALREADY_USED });
+      return;
+    }
+
+    Queue.add(JobType.SEND_INVITE, { email, institution_id, role_id });
+
+    response.status(200).json({ data: 'Successfully sended email' });
   }
 }

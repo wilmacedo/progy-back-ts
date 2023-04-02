@@ -7,6 +7,13 @@ interface RequestToken {
   expiration?: number;
 }
 
+interface InviteToken {
+  email: string;
+  institution_id: number;
+  role_id: number;
+  expiration: number;
+}
+
 export class EmailController {
   async verifyMail(request: Request, response: Response) {
     const { token } = request.query;
@@ -47,5 +54,33 @@ export class EmailController {
     });
 
     response.redirect('http://localhost:3000/login');
+  }
+
+  async acceptInvite(request: Request, response: Response) {
+    const { token } = request.query;
+    if (!token) {
+      response.status(400).json({ error: 'Invalid URL' });
+      return;
+    }
+
+    const decryptedData = new Cryptograph().decrypted(token as string);
+    if (!decryptedData) {
+      response.status(400).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const data: InviteToken = JSON.parse(decryptedData);
+    if (!data) {
+      response.status(400).json({ error: 'Invalid token' });
+      return;
+    }
+
+    const clientToken = btoa(JSON.stringify(data));
+    if (!clientToken || clientToken.length === 0) {
+      response.status(500).json({ error: 'Failed to generate client token' });
+      return;
+    }
+
+    response.redirect('http://localhost:3000/invite?token=' + clientToken);
   }
 }

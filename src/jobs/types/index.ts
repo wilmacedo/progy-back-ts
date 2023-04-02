@@ -2,6 +2,7 @@ import Queue from 'bull';
 
 export enum JobType {
   REGISTRATION_ACCOUNT = 'RegistrationAccount',
+  SEND_INVITE = 'SendInvite',
 }
 
 export interface JobQueue<T> {

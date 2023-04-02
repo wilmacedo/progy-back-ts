@@ -1,8 +1,8 @@
-import { prisma } from '../database/client';
+import { Activity } from '@prisma/client';
 import { isValid } from 'date-fns';
 import { Request, Response } from 'express';
+import { prisma } from '../database/client';
 import { ErrorType } from '../types';
-import { Activity } from '@prisma/client';
 
 const calculateIDP = (activities: Activity[]) => {
   activities = activities.filter(activity => {
@@ -55,6 +55,14 @@ const calculateTotals = (activities: Activity[]) => {
 
 export const info = async (request: Request, response: Response) => {
   const { planning_id } = request;
+  if (!planning_id) {
+    response.user.error({ type: ErrorType.NOT_FOUND_PLANNING });
+    return;
+  }
+
+  const planning = await prisma.planning.findUnique({
+    where: { id: planning_id },
+  });
   if (!planning_id) {
     response.user.error({ type: ErrorType.NOT_FOUND_PLANNING });
     return;
@@ -117,6 +125,7 @@ export const info = async (request: Request, response: Response) => {
 
     response.status(200).json({
       data: {
+        title: planning?.name,
         stagesPerInitiative,
         statusPerActivity,
         costIndicator: calculateTotals(activities),
@@ -128,7 +137,6 @@ export const info = async (request: Request, response: Response) => {
       },
     });
   } catch (e) {
-    console.error(e);
     response.status(500).json({ error: e });
   }
 };

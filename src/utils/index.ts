@@ -9,3 +9,6 @@ export const formatDate = (date: Date) => {
 
   return `${day}/${month}/${year}`;
 };
+
+export const validateMail = (email: string) =>
+  email.match('[a-z0-9]+@[a-z]+.[a-z]{2,3}');

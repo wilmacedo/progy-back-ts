@@ -17,7 +17,7 @@ export default class RegistrationMail extends Job<User> {
 
     const encrypted = cryptograph.encrypt({ user_id: data.id });
     if (!encrypted) {
-      throw new Error('Failed on encrypt data');
+      throw new Error('Failed on encrypt registration account data');
     }
 
     prisma.confirmedEmail.create({ data: { user_id: data.id } }).then(data => {
