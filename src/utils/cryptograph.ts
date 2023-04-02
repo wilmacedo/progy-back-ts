@@ -56,4 +56,13 @@ export class Cryptograph {
       return;
     }
   }
+
+  verify(data: string): boolean {
+    if (typeof data !== 'string') return false;
+
+    const decryptedData = this.decrypted(data);
+    if (!decryptedData) return false;
+
+    return true;
+  }
 }
