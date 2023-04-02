@@ -7,11 +7,12 @@ const router = Router();
 const controller = new InstitutionController();
 const auth = new AuthController();
 
+router.get('/:id', controller.findOne);
+
 router.use(auth.verify, verify(roles.high), permission);
 
 router.post('/', controller.create);
 router.get('/', controller.findMany);
-router.get('/:id', controller.findOne);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 
