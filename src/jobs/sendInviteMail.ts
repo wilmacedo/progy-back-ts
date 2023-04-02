@@ -29,12 +29,12 @@ export default class SendInviteMail extends Job<User> {
 
     mail.sendMail({
       to: { name: 'Convidado', email },
-      subject: 'Convite para participar da plataforma',
+      subject: 'Convite para participar de um planejamento',
       title: 'Confirme sua participação',
       description:
         'Você foi convidado para participar de um planejamento! Clique no botão abaixo para confirmação seu nome e senha e ative sua conta',
       button: 'participar',
-      link: 'http://localhost:3333/email/acceptInvite?token=' + encrypted,
+      link: 'http://localhost:3333/email/invite/redirect?token=' + encrypted,
     });
   }
 }

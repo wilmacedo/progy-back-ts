@@ -53,7 +53,7 @@ export class User {
         },
       });
 
-      Queue.add(JobType.REGISTRATION_ACCOUNT, user);
+      // Queue.add(JobType.REGISTRATION_ACCOUNT, user);
 
       response.user.created(user);
     } catch (e) {
@@ -152,7 +152,7 @@ export class User {
     const { email, password } = request.body;
 
     try {
-      const user = await prisma.user.findFirst({ where: { email } });
+      const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
         response.user.error({ type: ErrorType.NOT_FOUND });
         return;
@@ -292,7 +292,7 @@ export class User {
       return;
     }
 
-    const user = await prisma.user.findFirst({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email } });
     if (user) {
       response.user.error({ type: ErrorType.EMAIL_ALREADY_USED });
       return;
