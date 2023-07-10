@@ -1,23 +1,27 @@
-version: '3.7'
+version: '3.9'
+name: 'progy-back-end'
 
 services:
-  database:
-    image: postgres
-    container_name: database
+  postgres:
+    image: postgres:latest
+    container_name: progy-postgres
     restart: always
     ports:
-      - 5433:5432
-    environment:
-      - DATABASE_URL=postgres://postgres:admin@localhost:5433/progy?schema=public
-      - PORT=3334
+      - 5432:${POSTGRES_PORT}
     volumes:
-      - pgdata:/data/postgres
+      - pg-data:/data/postgres
+    env_file:
+      - ./.env
 
   redis:
     image: redis:alpine
+    container_name: progy-redis
+    restart: always
     ports:
-      - 6379:6379
-
+      - 6379:${REDIS_PORT}
+    volumes:
+      - redis-data:/data/redis
+    
 volumes:
-  pgdata:
-    driver: local
+  pg-data:
+  redis-data:
