@@ -3,4 +3,4 @@ import { Router } from 'express';
 
 export const router = Router();
 
-router.use('/', usersRouter);
+router.use('/users', usersRouter);

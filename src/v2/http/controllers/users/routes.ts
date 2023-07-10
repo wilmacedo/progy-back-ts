@@ -1,7 +1,6 @@
 import { Router } from 'express';
+import { register } from './register';
 
 export const usersRouter = Router();
 
-usersRouter.get('/users', (_, res) => {
-  res.sendStatus(201);
-});
+usersRouter.post('/', register);
