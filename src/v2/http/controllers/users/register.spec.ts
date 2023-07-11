@@ -61,4 +61,15 @@ describe('Register user case (e2e)', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe('Validation error');
   });
+
+  it('should be not able to register with password less than 6 characters', async () => {
+    const response = await request(app).post('/v2/users').send({
+      name: 'Wil Macedo',
+      email: 'wil.macedo.sa@gmail.com',
+      password: '12345',
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('Validation error');
+  });
 });

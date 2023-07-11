@@ -16,7 +16,11 @@ export class InMemoryUserRepository implements UserRepository {
     return user || null;
   }
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
+  async create({
+    name,
+    email,
+    password,
+  }: Prisma.UserCreateInput): Promise<User> {
     let id = 1;
     if (this.users.length > 0) {
       id = this.users[this.users.length - 1].id + 1;
@@ -24,9 +28,9 @@ export class InMemoryUserRepository implements UserRepository {
 
     const user: User = {
       id,
-      name: data.name,
-      email: data.email,
-      password: data.password,
+      name,
+      email,
+      password,
       created_at: new Date(),
       updated_at: new Date(),
       role: '',

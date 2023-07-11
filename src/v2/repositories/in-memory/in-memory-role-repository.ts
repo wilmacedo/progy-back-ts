@@ -10,7 +10,7 @@ export class InMemoryRoleRepository implements RoleRepository {
     return role || null;
   }
 
-  async create(data: Prisma.RoleCreateInput): Promise<Role> {
+  async create({ name }: Prisma.RoleCreateInput): Promise<Role> {
     let id = 1;
     if (this.roles.length > 0) {
       id = this.roles[this.roles.length - 1].id + 1;
@@ -18,7 +18,7 @@ export class InMemoryRoleRepository implements RoleRepository {
 
     const role: Role = {
       id,
-      name: data.name,
+      name,
       created_at: new Date(),
       updated_at: new Date(),
     };
