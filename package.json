@@ -8,8 +8,13 @@
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
     "dev:queue": "tsx watch src/queue.ts",
+    "build": "tsup src",
     "dev:v2": "tsx watch src/v2/server.ts",
-    "build": "tsup src"
+    "test:create-prisma-environment": "pnpm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "pnpm link vitest-environment-prisma",
+    "test": "vitest run --dir src/v2/use-cases",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test:e2e": "vitest run --dir src/v2/http"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -25,6 +30,7 @@
     "@types/nodemailer": "^6.4.7",
     "@types/nodemailer-express-handlebars": "^4.0.2",
     "@types/pdfmake": "^0.2.2",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
@@ -33,14 +39,16 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
+    "express-async-errors": "^3.1.1",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
     "prisma": "^4.10.0",
-    "ts-node": "^10.9.1",
+    "supertest": "^6.3.3",
     "tsup": "^6.6.3",
     "tsx": "^3.12.3",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vitest": "^0.33.0"
   },
   "dependencies": {
     "@prisma/client": "4.10.0",
@@ -48,7 +56,7 @@
     "bull": "^4.10.4",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "exceljs": "^4.3.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",

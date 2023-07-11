@@ -1,5 +1,5 @@
+import { env } from '@/env';
 import { NextFunction, Request, Response } from 'express';
-import { env } from 'v2/env';
 import { ZodError } from 'zod';
 
 export function errorHandler(

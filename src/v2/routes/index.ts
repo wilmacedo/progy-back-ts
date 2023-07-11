@@ -1,4 +1,4 @@
-import { usersRouter } from '@/v2/http/controllers/users/routes';
+import { usersRouter } from '@/http/controllers/users/routes';
 import { Router } from 'express';
 
 export const router = Router();

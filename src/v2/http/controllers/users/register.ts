@@ -1,5 +1,5 @@
-import { UserAlreadyExists } from '@/v2/use-cases/errors/user-already-exists-error';
-import { MakeRegisterCase } from '@/v2/use-cases/factories/make-register-case';
+import { UserAlreadyExists } from '@/use-cases/errors/user-already-exists-error';
+import { MakeRegisterCase } from '@/use-cases/factories/make-register-case';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 

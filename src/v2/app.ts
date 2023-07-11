@@ -1,6 +1,7 @@
-import { errorHandler } from '@/v2/utils/error-handler';
+import { errorHandler } from '@/utils/error-handler';
 import cors from 'cors';
 import express from 'express';
+import 'express-async-errors';
 import morgan from 'morgan';
 import { router } from './routes';
 
