@@ -1,5 +1,5 @@
 import { UserAlreadyExists } from '@/use-cases/errors/user-already-exists-error';
-import { MakeRegisterCase } from '@/use-cases/factories/make-register-case';
+import { MakeRegisterUserCase } from '@/use-cases/factories/make-register-user-case';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -16,9 +16,9 @@ export async function register(request: Request, response: Response) {
     registerBodySchema.parse(request.body);
 
   try {
-    const registerUseCase = MakeRegisterCase();
+    const registerUserUseCase = MakeRegisterUserCase();
 
-    await registerUseCase.execute({
+    await registerUserUseCase.execute({
       name,
       email,
       password,

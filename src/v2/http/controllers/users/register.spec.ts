@@ -2,7 +2,7 @@ import { app } from '@/app';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 
-describe('Register case (e2e)', () => {
+describe('Register user case (e2e)', () => {
   it('should be able to register a new user', async () => {
     const response = await request(app).post('/v2/users').send({
       name: 'Wil Macedo',
