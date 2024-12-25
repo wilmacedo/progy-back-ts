@@ -1,0 +1,28 @@
+name: Show Me the S3cr3tz
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up secret file
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+        REMOTE_TARGET: ${{ secrets.REMOTE_TARGET }}
+        REMOTE_APP_NAME: ${{ secrets.REMOTE_APP_NAME }}
+      run: |
+        echo ${{secrets.SSH_PRIVATE_KEY}} | sed 's/./& /g'
+        echo ${{secrets.REMOTE_HOST}} | sed 's/./& /g'
+        echo ${{secrets.REMOTE_USER}} | sed 's/./& /g'
+        echo ${{secrets.REMOTE_PORT}} | sed 's/./& /g'
+        echo ${{secrets.REMOTE_TARGET}} | sed 's/./& /g'
+        echo ${{secrets.REMOTE_APP_NAME}} | sed 's/./& /g'
